@@ -2,9 +2,9 @@
 
 var fs = require('fs');
 var path = require('path');
-var UglifyJS = require('uglify-js');
-var CleanCSS = require('clean-css');
-var ImageMin = require('imagemin');
+var UglifyJS = require('cordova-minify/node_modules/uglify-js');
+var CleanCSS = require('cordova-minify/node_modules/clean-css');
+var ImageMin = require('cordova-minify/node_modules/imagemin');
 var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
     keepSpecialComments: 0
@@ -34,7 +34,7 @@ switch (platform) {
         return;
 }
 
-var foldersToProcess = ['js', 'css'];
+var foldersToProcess = ['js', 'css', 'img'];
 
 foldersToProcess.forEach(function(folder) {
     processFiles(path.join(platformPath, folder));
