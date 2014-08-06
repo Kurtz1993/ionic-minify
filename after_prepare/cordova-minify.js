@@ -20,25 +20,8 @@ var isRelease = true;
 if (!isRelease) {
     return;
 }
-console.log('cordova-minify will always run by default, read line 17 in hooks/after_prepare/uglify.js to only enable this only for release');
+console.log('cordova-minify STARTING - minifying your js, css, and images. Sit back and relax!');
 
-switch (platform) {
-    case 'android':
-        platformPath = path.join(platformPath, platform, "assets", "www");
-        break;
-    case 'ios':
-        platformPath = path.join(platformPath, platform, "www");
-        break;
-    default:
-        console.log('Hook currently supports only Android and iOS');
-        return;
-}
-
-var foldersToProcess = ['js', 'css', 'img'];
-
-foldersToProcess.forEach(function(folder) {
-    processFiles(path.join(platformPath, folder));
-});
 
 function processFiles(dir) {
     fs.readdir(dir, function (err, list) {
@@ -111,3 +94,22 @@ function compress(file) {
             break;
     }
 }
+
+
+switch (platform) {
+    case 'android':
+        platformPath = path.join(platformPath, platform, "assets", "www");
+        break;
+    case 'ios':
+        platformPath = path.join(platformPath, platform, "www");
+        break;
+    default:
+        console.log('Hook currently supports only Android and iOS');
+        return;
+}
+
+var foldersToProcess = ['js', 'css', 'img'];
+
+foldersToProcess.forEach(function(folder) {
+    processFiles(path.join(platformPath, folder));
+});
