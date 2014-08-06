@@ -21,4 +21,4 @@ Out of the box this hook requires Cordova 3.3.1-0.4.2 and above but it can work 
 * On Linux: `hooks` folder needs to have permissions modified.  Perform a `chmod -R 755 /hooks` to resolve this issue.
 
 ## License
-[MIT](https://github.com/rossmartin/cordova-minify/blob/master/LICENSE)
+[MIT](https://github.com/alastairparagas/cordova-minify/blob/master/LICENSE)
