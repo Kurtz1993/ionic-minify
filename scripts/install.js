@@ -16,7 +16,7 @@ for(var pathIndex in paths) {
 }
 
 // Absolute Location of our minifer.js file
-var minifyFilePath = path.join(cwd, 'after_prepare', 'minify.js');
+var minifyFilePath = path.join(cwd, 'after_prepare', 'cordova-minify.js');
 
 // Copy our minify script to the cordova hooks folder.
 var minifyFile = fs.readFileSync(minifyFilePath);
@@ -26,4 +26,6 @@ console.log('Copying Minifier File to Cordova hooks/after_prepare');
 fs.writeFileSync(minifyFileNewPath, minifyFile);
 
 console.log('Finished set-up! Your JS, CSS, and img files will be automatically compressed, and your JS files uglified!');
-console.log('Any issues? Do not hesitate to post bugs and issues to https://github.com/alastairparagas/cordova-minify!');
+console.log();
+console.log('cordova-minify - developed by Alastair Paragas@2014, Stela Inc. cordova-minify is an open-source/MIT project');
+console.log('Any issues? Do not hesitate to post bugs and issues to https://github.com/alastairparagas/cordova-minify');

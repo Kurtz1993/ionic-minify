@@ -4,7 +4,7 @@
 
 var fs = require('fs'), path = require('path'), cwd = process.cwd();
 
-var minifyJsPath = path.join(cwd, '..', '..', 'hooks', 'after_prepare', 'minify.js');
+var minifyJsPath = path.join(cwd, '..', '..', 'hooks', 'after_prepare', 'cordova-minify.js');
 
 fs.unlink(minifyJsPath);
 console.log('Uninstalled hooks: ', minifyJsPath);
