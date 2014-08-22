@@ -40,7 +40,7 @@ Out of the box this hook requires Cordova 3.3.1-0.4.2 and above but it can work 
 * Configuration of how image, css, and javascript files are compressed in a configuration file for easier and cleaner implementation, preventing the developer from messing up with underlying code.
 
 ## Quirks:
-* On Linux: `hooks` folder needs to have permissions modified.  Perform a `chmod -R 755 /hooks` to resolve this issue.
+* On Linux and OSX: `hooks` folder needs to have permissions modified.  Perform a `chmod -R 755 /hooks` to resolve this issue.
 
 ## License
 [MIT](https://github.com/alastairparagas/cordova-minify/blob/master/LICENSE)
