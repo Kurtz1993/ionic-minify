@@ -1,6 +1,6 @@
 {
   "name": "cordova-minify",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Cordova hook that uglifies and minifies your app's Javascript files, minifies CSS files, and compresses your image files.",
   "homepage": "https://github.com/alastairparagas/cordova-minify",
   "keywords": [
