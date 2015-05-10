@@ -14,7 +14,7 @@
   "dependencies" : {
     "uglify-js": "2.4.x",
     "clean-css": "2.2.x",
-    "image-min": "0.4.x"
+    "imagemin": "3.1.x"
   },
   "author": "Alastair Paragas",
   "license": "MIT",
