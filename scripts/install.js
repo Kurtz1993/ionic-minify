@@ -15,7 +15,7 @@ for(var pathIndex in paths) {
 	}	
 }
 
-// Absolute Location of our minifer.js file
+// Absolute Location of our cordova-minify.js file
 var minifyFilePath = path.join(cwd, 'after_prepare', 'cordova-minify.js');
 
 // Copy our minify script to the cordova hooks folder.
