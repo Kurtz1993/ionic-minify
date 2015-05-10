@@ -2,9 +2,9 @@
 
 var fs = require('fs');
 var path = require('path');
-var UglifyJS = require('cordova-minify/node_modules/uglify-js');
-var CleanCSS = require('cordova-minify/node_modules/clean-css');
-var ImageMin = require('cordova-minify/node_modules/image-min');
+var UglifyJS = require('uglify-js');
+var CleanCSS = require('clean-css');
+var ImageMin = require('image-min');
 var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
     keepSpecialComments: 0
