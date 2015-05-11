@@ -48,8 +48,8 @@ function compress(file) {
     switch(ext) {
         case '.js':
             console.log('Compressing/Uglifying JS File: ' + file);
-            var res = ngAnnotate(String(fs.readFileSync(file)), { add: true }); // This will make minification-safe not necessary...
-            var result = UglifyJS.minify(res.src, {
+            var js = ngAnnotate(String(fs.readFileSync(file)), { add: true }); // This will make minification-safe not necessary...
+            var result = UglifyJS.minify(js.src, {
                 compress: {
                     drop_console: true
                 },
