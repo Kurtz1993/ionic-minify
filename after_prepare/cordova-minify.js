@@ -55,13 +55,13 @@ function compress(file) {
                 },
                 fromString: true    // This will make the uglify work with ngAnnotate.
             });
-            fs.writeFileSync(file, result.code, 'utf8'); // overwrite the original unminified file
+            fs.writeFileSync(file, result.code, 'utf8');
             break;
         case '.css':
             console.log('Minifying CSS File: ' + file);
             var source = fs.readFileSync(file, 'utf8');
             var result = cssMinifier.minify(source);
-            fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
+            fs.writeFileSync(file, result, 'utf8');
             break;
         // Image options https://github.com/imagemin/imagemin
         case '.svg':
