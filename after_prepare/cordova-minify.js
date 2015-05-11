@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var UglifyJS = require('uglify-js');
 var CleanCSS = require('clean-css');
-var ImageMin = require('image-min');
+var ImageMin = require('imagemin');
 var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
     keepSpecialComments: 0
