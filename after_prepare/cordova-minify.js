@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var UglifyJS = require('uglify-js');
 var CleanCSS = require('clean-css');
+var ngAnnotate = require('ng-annotate');
 var ImageMin = require('imagemin');
 var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
@@ -47,18 +48,20 @@ function compress(file) {
     switch(ext) {
         case '.js':
             console.log('Compressing/Uglifying JS File: ' + file);
-            var result = UglifyJS.minify(file, {
+            var res = ngAnnotate(String(fs.readFileSync(file)), { add: true }); // This will make minification-safe not necessary...
+            var result = UglifyJS.minify(res.src, {
                 compress: {
                     drop_console: true
-                }
+                },
+                fromString: true    // This will make the uglify work with ngAnnotate.
             });
-            fs.writeFileSync(file, result.code, 'utf8');
+            fs.writeFileSync(file, result.code, 'utf8'); // overwrite the original unminified file
             break;
         case '.css':
             console.log('Minifying CSS File: ' + file);
             var source = fs.readFileSync(file, 'utf8');
             var result = cssMinifier.minify(source);
-            fs.writeFileSync(file, result, 'utf8');
+            fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
             break;
         // Image options https://github.com/imagemin/imagemin
         case '.svg':
@@ -94,7 +97,6 @@ function compress(file) {
             break;
     }
 }
-
 
 switch (platform) {
     case 'android':
