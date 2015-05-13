@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var UglifyJS = require('uglify-js');
 var CleanCSS = require('clean-css');
+var ngAnnotate = require('ng-annotate');
 var ImageMin = require('imagemin');
 var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
@@ -14,9 +15,9 @@ var rootDir = process.argv[2];
 var platformPath = path.join(rootDir, 'platforms');
 var platform = process.env.CORDOVA_PLATFORMS;
 var cliCommand = process.env.CORDOVA_CMDLINE;
-var isRelease = true;
+//var isRelease = true;
 
-//var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
+var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
 if (!isRelease) {
     return;
 }
@@ -47,18 +48,20 @@ function compress(file) {
     switch(ext) {
         case '.js':
             console.log('Compressing/Uglifying JS File: ' + file);
-            var result = UglifyJS.minify(file, {
-                compress: {
-                    drop_console: true
-                }
+            var res = ngAnnotate(String(fs.readFileSync(file)), { add: true });
+            var result = UglifyJS.minify(res.src, {
+                compress: { // pass false here if you only want to minify (no obfuscate)
+                    drop_console: true // remove console.* statements (log, warn, etc.)
+                },
+                fromString: true
             });
-            fs.writeFileSync(file, result.code, 'utf8');
+            fs.writeFileSync(file, result.code, 'utf8'); // overwrite the original unminified file
             break;
         case '.css':
             console.log('Minifying CSS File: ' + file);
             var source = fs.readFileSync(file, 'utf8');
             var result = cssMinifier.minify(source);
-            fs.writeFileSync(file, result, 'utf8');
+            fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
             break;
         // Image options https://github.com/imagemin/imagemin
         case '.svg':
@@ -95,7 +98,6 @@ function compress(file) {
     }
 }
 
-
 switch (platform) {
     case 'android':
         platformPath = path.join(platformPath, platform, "assets", "www");
@@ -112,4 +114,5 @@ var foldersToProcess = ['js', 'css', 'img'];
 
 foldersToProcess.forEach(function(folder) {
     processFiles(path.join(platformPath, folder));
+
 });

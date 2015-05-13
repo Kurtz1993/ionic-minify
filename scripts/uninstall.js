@@ -13,4 +13,4 @@ fs.unlink(minifyJsPath, function(error){
         console.log('Uninstalled hooks: ', minifyJsPath);
     }
 });
-console.log('Uninstalled cordova-minify. We are sad to see you go! See you soon!');
+console.log('Uninstalled successfuly!');
