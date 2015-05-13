@@ -15,9 +15,9 @@ var rootDir = process.argv[2];
 var platformPath = path.join(rootDir, 'platforms');
 var platform = process.env.CORDOVA_PLATFORMS;
 var cliCommand = process.env.CORDOVA_CMDLINE;
-var isRelease = true;
+//var isRelease = true;
 
-//var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
+var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
 if (!isRelease) {
     return;
 }
@@ -48,20 +48,20 @@ function compress(file) {
     switch(ext) {
         case '.js':
             console.log('Compressing/Uglifying JS File: ' + file);
-            var js = ngAnnotate(String(fs.readFileSync(file)), { add: true }); // This will make minification-safe not necessary...
-            var result = UglifyJS.minify(js.src, {
-                compress: {
-                    drop_console: true
+            var res = ngAnnotate(String(fs.readFileSync(file)), { add: true });
+            var result = UglifyJS.minify(res.src, {
+                compress: { // pass false here if you only want to minify (no obfuscate)
+                    drop_console: true // remove console.* statements (log, warn, etc.)
                 },
-                fromString: true    // This will make the uglify work with ngAnnotate.
+                fromString: true
             });
-            fs.writeFileSync(file, result.code, 'utf8');
+            fs.writeFileSync(file, result.code, 'utf8'); // overwrite the original unminified file
             break;
         case '.css':
             console.log('Minifying CSS File: ' + file);
             var source = fs.readFileSync(file, 'utf8');
             var result = cssMinifier.minify(source);
-            fs.writeFileSync(file, result, 'utf8');
+            fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
             break;
         // Image options https://github.com/imagemin/imagemin
         case '.svg':
@@ -114,4 +114,5 @@ var foldersToProcess = ['js', 'css', 'img'];
 
 foldersToProcess.forEach(function(folder) {
     processFiles(path.join(platformPath, folder));
+
 });
