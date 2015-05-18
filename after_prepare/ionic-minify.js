@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+var cliCommand = process.env.CORDOVA_CMDLINE;
+//var isRelease = true;
+
+var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
+if (!isRelease) {
+    return;
+}
+
 var fs = require('fs');
 var path = require('path');
 var UglifyJS = require('uglify-js');
@@ -14,13 +22,6 @@ var cssMinifier = new CleanCSS({
 var rootDir = process.argv[2];
 var platformPath = path.join(rootDir, 'platforms');
 var platform = process.env.CORDOVA_PLATFORMS;
-var cliCommand = process.env.CORDOVA_CMDLINE;
-//var isRelease = true;
-
-var isRelease = (cliCommand.indexOf('--release') > -1); // comment the above line and uncomment this line to turn the hook on only for release
-if (!isRelease) {
-    return;
-}
 console.log('cordova-minify STARTING - minifying your js, css, and images. Sit back and relax!');
 
 
