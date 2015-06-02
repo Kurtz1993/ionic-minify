@@ -2,8 +2,9 @@
 
 var fs = require('fs');
 var path = require('path');
-var cwd = process.cwd(); // Current working directory is /project/node_modules/cordova-minify/
+var cwd = process.cwd();
 var scriptPath = __dirname;
+var dependencies = ['clean-css', 'imagemin', 'ng-annotate', 'uglify-js'];
 
 var paths = [ path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare') ];
 
@@ -23,6 +24,10 @@ var minifyFile = fs.readFileSync(minifyFilePath);
 var minifyFileNewPath = path.join(paths[1], 'minify.js');
 console.log('Copying minifier file to Cordova hooks/after_prepare...');
 fs.writeFileSync(minifyFileNewPath, minifyFile);
+console.log('Moving dependencies to node_modules folder...');
+for(var i in dependencies){
+	// Moves dependencies to node_modules folder.
+	fs.renameSync(path.join(cwd, 'node_modules', dependencies[i]), path.join(cwd, '..', dependencies[i]));
+}
 
 console.log('Finished installing. Try running ionic build --release \n');
-console.log('You can check the script inside hooks/after_prepare so you can minify while developing too!');
