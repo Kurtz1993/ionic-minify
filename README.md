@@ -9,14 +9,6 @@ npm install ionic-minify --save-dev
 ```
 The `--save-dev` flag is important! If you decide to work on another environment, ionic-minify cannot run without the original package and its dependencies! After install, an `after_prepare` folder will be added to your `hooks` folder with the `ionic-minify.js` script in it.
 
-## Some valid Cordova development questions...
-
-### Why not just use Grunt/Yeoman?
-One can use Grunt/Yeoman, though I feel that those are more suited for building web applications/assets, whereas this NPM package is solely developed for Cordova and does not touch your development environment - being the www folder, but rather, only the produced assets. Also, I feel like pulling out Yeoman is an overkill for Cordova, which tends to be a repetitive build process from the start, whereas just pure Grunt configuration takes forever. With ionic-minify, install the plugin, and done!
-
-### Why minify/compress your CSS/Javascript/Images?
-Though you are not improving network speeds considering that assets are not being transmitted over the internet (packaged in your app - duh), I feel that it will help to compress javascript, css, and images to reduce app size and promote performance improvements. App size is a problem for lower-end phones that have limited storage - I personally found this a problem with my Pantech Burst (Android 4.0 - Ice Cream Sandwich).
-
 ## Usage
 Once you have this hook installed it will compress your app's JavaScript and CSS when you run a `ionic prepare <platform>` or `ionic build <platform>` command.  This hook does not change your assets that live in the root www folder; it will uglify the assets that get outputted to the platforms folder after a `prepare` or `build`.
 
