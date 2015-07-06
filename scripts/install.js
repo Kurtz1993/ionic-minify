@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var cwd = process.cwd();
 var scriptPath = __dirname;
-var dependencies = ['clean-css', 'imagemin', 'ng-annotate', 'uglify-js'];
+var dependencies = ['clean-css', 'ng-annotate', 'uglify-js'];
 
 var paths = [ path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare') ];
 
