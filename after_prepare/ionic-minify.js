@@ -13,8 +13,6 @@ var path = require('path');
 var UglifyJS = require('uglify-js');
 var CleanCSS = require('clean-css');
 var ngAnnotate = require('ng-annotate');
-var ImageMin = require('imagemin');
-var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
     keepSpecialComments: 0
 });
@@ -48,7 +46,7 @@ function compress(file) {
     var ext = path.extname(file);
     switch(ext) {
         case '.js':
-            console.log('Compressing/Uglifying JS File: ' + file);
+            console.log('Minifying JS File: ' + file);
             var res = ngAnnotate(String(fs.readFileSync(file)), { add: true });
             var result = UglifyJS.minify(res.src, {
                 compress: { // pass false here if you only want to minify (no obfuscate)
@@ -63,35 +61,6 @@ function compress(file) {
             var source = fs.readFileSync(file, 'utf8');
             var result = cssMinifier.minify(source);
             fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
-            break;
-        // Image options https://github.com/imagemin/imagemin
-        case '.svg':
-            console.log('Minifying SVG File: ' + file);
-            // svgGo options https://github.com/imagemin/imagemin#svgo
-            imagemin.src(file).dest(file).use(ImageMin.svgo());
-            break;
-        case '.gif':
-            console.log('Minifying GIF File: ' + file);
-            // GifSicle options https://github.com/imagemin/imagemin#gifsicle
-            imagemin.src(file).dest(file).use(ImageMin.gifsicle({
-                interlaced: true
-            }));
-            break;
-        case '.png':
-            console.log('Minifying PNG File: ' + file);
-            // OptiPNG options https://github.com/imagemin/imagemin#optipng
-            imagemin.src(file).dest(file).use(ImageMin.optipng({
-                optimizationLevel: 2
-            }));
-            break;
-        case '.jpg':
-        case '.jpeg':
-            console.log('Minifying JPEG File: ' + file);
-            // jpegTran options https://github.com/imagemin/imagemin#jpegtran
-            imagemin.src(file).dest(file).use(ImageMin.jpegtran({
-                progressive: true
-            }));
-            console.log('Minifying JPEG File: ' + file);
             break;
         default:
             console.log('Encountered file with ' + ext + ' extension - not compressing.');
@@ -111,7 +80,7 @@ switch (platform) {
         return;
 }
 
-var foldersToProcess = ['js', 'css', 'img'];
+var foldersToProcess = ['js', 'css'];
 
 foldersToProcess.forEach(function(folder) {
     processFiles(path.join(platformPath, folder));
