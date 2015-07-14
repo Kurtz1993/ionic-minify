@@ -7,7 +7,7 @@ var scriptPath = __dirname;
 var dependencies = ['clean-css', 'ng-annotate', 'uglify-js'];
 
 var paths = [path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare')];
-
+fs.chmodSync(path.join(paths[1]), 755); // Resolve permissions issue in Linux and OSX.
 // If paths do not exist, make them.
 for (var pathIndex in paths) {
 	if (!fs.existsSync(paths[pathIndex])) {
