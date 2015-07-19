@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 var cliCommand = process.env.CORDOVA_CMDLINE;
-var isRelease = true; // Uncomment this to always minify files...
+// var isRelease = true; // Uncomment this to always minify files...
 
-//var isRelease = (cliCommand.indexOf('--release') > -1);
+var isRelease = (cliCommand.indexOf('--release') > -1);
 if (!isRelease) {
   return;
 }
@@ -13,6 +13,8 @@ var path = require('path');
 var UglifyJS = require('uglify-js');
 var CleanCSS = require('clean-css');
 var ngAnnotate = require('ng-annotate');
+var ImageMin = require('imagemin');
+var imagemin = new ImageMin();
 var cssMinifier = new CleanCSS({
   keepSpecialComments: 0
 });
@@ -21,7 +23,6 @@ var rootDir = process.argv[2];
 var platformPath = path.join(rootDir, 'platforms');
 var platform = process.env.CORDOVA_PLATFORMS;
 console.log('Minifying your files...');
-
 
 function processFiles(dir) {
   fs.readdir(dir, function (err, list) {
@@ -68,8 +69,33 @@ function compress(file) {
       var result = cssMinifier.minify(source);
       fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
       break;
-    default:
-      console.log('Got file with ' + ext + ' extension - not minifying.');
+    // Image options https://github.com/imagemin/imagemin
+    case '.svg':
+      console.log('Compressing SVG image: ' + fileName);
+      // svgGo options https://github.com/imagemin/imagemin-svgo
+      imagemin.src(file).dest(file).use(ImageMin.svgo());
+      break;
+    case '.gif':
+      console.log('Compressing GIF image: ' + fileName);
+      // GifSicle options https://github.com/imagemin/imagemin-gifsicle
+      imagemin.src(file).dest(file).use(ImageMin.gifsicle({
+        interlaced: true
+      }));
+      break;
+    case '.png':
+      console.log('Compressing PNG image: ' + fileName);
+      // OptiPNG options https://github.com/imagemin/imagemin-optipng
+      imagemin.src(file).dest(file).use(ImageMin.optipng({
+        optimizationLevel: 3
+      }));
+      break;
+    case '.jpg':
+    case '.jpeg':
+      console.log('Compressing JPEG image: ' + fileName);
+      // jpegTran options https://github.com/imagemin/imagemin-jpegtran
+      imagemin.src(file).dest(file).use(ImageMin.jpegtran({
+        progressive: true
+      }));
       break;
   }
 }
@@ -86,7 +112,7 @@ switch (platform) {
     return;
 }
 
-var foldersToProcess = ['js', 'css', 'lib'];
+var foldersToProcess = ['js', 'css', 'lib', 'img'];
 
 foldersToProcess.forEach(function (folder) {
   processFiles(path.join(platformPath, folder));

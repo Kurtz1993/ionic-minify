@@ -1,6 +1,6 @@
 {
   "name": "ionic-minify",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Cordova hook that minifies your JavaScript and CSS files.",
   "homepage": "https://github.com/Kurtz1993/ionic-minify",
   "keywords": [
@@ -9,13 +9,15 @@
     "minify",
     "hook",
     "hooks",
+    "compress",
     "ionic-minify",
     "ionic"
   ],
   "dependencies": {
-    "uglify-js": "2.4.x",
-    "ng-annotate": "0.15.4",
-    "clean-css": "2.2.x"
+    "clean-css": "^2.2.23",
+    "imagemin": "^3.2.0",
+    "ng-annotate": "^0.15.4",
+    "uglify-js": "^2.4.23"
   },
   "author": "Luis Rogelio Hernández López",
   "license": "MIT",
