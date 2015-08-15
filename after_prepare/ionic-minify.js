@@ -1,38 +1,98 @@
 #!/usr/bin/env node
+var hookConf  = require('../minify-conf.json');
+var cmd       = process.env.CORDOVA_CMDLINE;
+//var cmd = ''; 
+var isRelease = (cmd.indexOf('--release') > -1);
 
-var cliCommand = process.env.CORDOVA_CMDLINE;
-// var isRelease = true; // Uncomment this to always minify files...
-
-var isRelease = (cliCommand.indexOf('--release') > -1);
-if (!isRelease) {
+if(!isRelease){
+  // If it's not release, exit.
   return;
 }
 
-var fs = require('fs');
-var path = require('path');
-var UglifyJS = require('uglify-js');
-var CleanCSS = require('clean-css');
-var ngAnnotate = require('ng-annotate');
-var ImageMin = require('imagemin');
-var imagemin = new ImageMin();
-var cssMinifier = new CleanCSS({
-  keepSpecialComments: 0
+// Modules
+var fs                = require('fs');
+var path              = require('path');
+var UglifyJS          = require('uglify-js');
+var CleanCSS          = require('clean-css');
+var ngAnnotate        = require('ng-annotate');
+
+// Process variables
+var rootDir           = process.argv[2];
+var platformPath      = path.join(rootDir, 'platforms');
+var platforms         = process.env.CORDOVA_PLATFORMS.split(',');
+var foldersToProcess  = hookConf.foldersToProcess;
+var cssMinifier       = new CleanCSS(hookConf.cssOptions);
+
+console.log('Starting minifying your files...');
+
+// Specify the www folder for each platform in the command.
+platforms.forEach(function (platform) {
+  switch (platform) {
+    case 'android':
+      platformPath = path.join(platformPath, platform, 'assets', 'www');
+      break;
+    case 'ios':
+    case 'browser':
+      platformPath = path.join(platformPath, platform, 'www');
+      break;
+    default:
+      console.log('ionic-minify currently suports Android, iOS and browser only.');
+      return;
+  }
 });
 
-var rootDir = process.argv[2];
-var platformPath = path.join(rootDir, 'platforms');
-var platform = process.env.CORDOVA_PLATFORMS;
-console.log('Minifying your files...');
+/*
+ * Compresses a file.
+ * @param {string} file - This is the file path.
+ */
+var compress = function (file) {
+  var extension = path.extname(file);
+  var fileName = path.basename(file);
+  if (fileName.indexOf('.min.') > -1) {
+    ext = '.min' + ext;
+  }
 
-function processFiles(dir) {
-  fs.readdir(dir, function (err, list) {
-    if (err) {
-      console.log('processFiles - reading directories error: ' + err);
+  switch (extension) {
+    case '.js':
+      console.log('Minifying JS file: ' + fileName);
+      (hookConf.jsOptions.outSourceMap ? hookConf.jsOptions.outSourceMap = file + '.map' : null);
+      var ngSafeFile = ngAnnotate(String(fs.readFileSync(file)), { add: true });
+      var result = UglifyJS.minify(ngSafeFile.src, hookConf.jsOptions);
+      fs.writeFileSync(file, result.code, 'utf8');
+      if (result.map) {
+        console.log('Creating map file: ' + fileName + '.map');
+        fs.writeFileSync(file + '.map', result.map, 'utf8');
+      }
+      break;
+    case '.css':
+      console.log('Minifying CSS file: ' + fileName);
+      var source = fs.readFileSync(file, 'utf8');
+      var result = cssMinifier.minify(source);
+      fs.writeFileSync(file, result.styles, 'utf8');
+      if (result.sourceMap) {
+        console.log('Creating map file: ' + fileName + '.map');
+        fs.writeFileSync(file + '.map', result.sourceMap, 'utf8');
+      }
+      break;
+    default:
+      console.log(extension + ' file found, not minifying...');
+      break;
+  }
+};
+
+/*
+ * Processes all the files in a directory.
+ * @params {string} dir - This is the directory that contains the files to be processed.
+*/
+var processFiles = function (dir) {
+  fs.readdir(dir, function (error, list) {
+    if (error) {
+      console.log('An error has occured while reading directories: ' + error);
       return;
     }
     list.forEach(function (file) {
       file = path.join(dir, file);
-      if (dir.indexOf('ionic') === -1 || dir.indexOf('ionic') === -1) {
+      if (dir.indexOf('ionic') === -1) {
         fs.stat(file, function (err, stat) {
           if (stat.isDirectory()) {
             processFiles(file);
@@ -43,77 +103,16 @@ function processFiles(dir) {
       }
     });
   });
-}
+};
 
-function compress(file) {
-  var ext = path.extname(file);
-  var fileName = path.basename(file);
-  if (fileName.indexOf('.min.') > -1) {
-    ext = '.min' + ext;
-  }
-  switch (ext) {
-    case '.js':
-      console.log('Minifying JS File: ' + fileName);
-      var res = ngAnnotate(String(fs.readFileSync(file)), { add: true });
-      var result = UglifyJS.minify(res.src, {
-        compress: { // pass false here if you only want to minify (no obfuscate)
-          drop_console: true // remove console.* statements (log, warn, etc.)
-        },
-        fromString: true
-      });
-      fs.writeFileSync(file, result.code, 'utf8'); // overwrite the original unminified file
-      break;
-    case '.css':
-      console.log('Minifying CSS File: ' + fileName);
-      var source = fs.readFileSync(file, 'utf8');
-      var result = cssMinifier.minify(source);
-      fs.writeFileSync(file, result, 'utf8'); // overwrite the original unminified file
-      break;
-    // Image options https://github.com/imagemin/imagemin
-    case '.svg':
-      console.log('Compressing SVG image: ' + fileName);
-      // svgGo options https://github.com/imagemin/imagemin-svgo
-      imagemin.src(file).dest(file).use(ImageMin.svgo());
-      break;
-    case '.gif':
-      console.log('Compressing GIF image: ' + fileName);
-      // GifSicle options https://github.com/imagemin/imagemin-gifsicle
-      imagemin.src(file).dest(file).use(ImageMin.gifsicle({
-        interlaced: true
-      }));
-      break;
-    case '.png':
-      console.log('Compressing PNG image: ' + fileName);
-      // OptiPNG options https://github.com/imagemin/imagemin-optipng
-      imagemin.src(file).dest(file).use(ImageMin.optipng({
-        optimizationLevel: 3
-      }));
-      break;
-    case '.jpg':
-    case '.jpeg':
-      console.log('Compressing JPEG image: ' + fileName);
-      // jpegTran options https://github.com/imagemin/imagemin-jpegtran
-      imagemin.src(file).dest(file).use(ImageMin.jpegtran({
-        progressive: true
-      }));
-      break;
-  }
-}
+/*
+ * Processes all the directories specified in the configuration file.
+ * @param {string} platformWww - This is the complete path of the www folder of the platform.
+*/
+var processFolders = function (platformWww) {
+  foldersToProcess.forEach(function (folder) {
+    processFiles(path.join(platformWww, folder));
+  });
+};
 
-switch (platform) {
-  case 'android':
-    platformPath = path.join(platformPath, platform, "assets", "www");
-    break;
-  case 'ios':
-    platformPath = path.join(platformPath, platform, "www");
-    break;
-  default:
-    console.log('This hook only works with Android and iOS.');
-    return;
-}
-
-var foldersToProcess = ['js', 'css', 'lib', 'img'];
-
-foldersToProcess.forEach(function (folder) {
-  processFiles(path.join(platformPath, folder));
-});
+processFolders(platformPath);

@@ -1,0 +1,16 @@
+{
+    "foldersToProcess": [
+        "js",
+        "css",
+        "lib"
+    ],
+    "jsOptions": {
+        "compress": {
+            "drop_console": true
+        },
+        "fromString": true
+    },
+    "cssOptions": {
+        "keepSpecialComments": 0
+    }
+}
