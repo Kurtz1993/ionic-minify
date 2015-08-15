@@ -1,24 +1,32 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var path = require('path');
-var cwd = process.cwd();
-var scriptPath = __dirname;
-var packageDependencies = require('../package.json').dependencies;
-var dependencies = [];
+var fs									= require('fs');
+var path								= require('path');
 
-for(var dependency in packageDependencies){
+//Directories and configurations.
+var cwd									= process.cwd();
+var scriptPath					= __dirname;
+var paths 							= [path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare')];
+var packageDependencies	= require('../package.json').dependencies;
+var dependencies				= [];
+var stat								=	null;
+
+// Detect dependencies.
+for (var dependency in packageDependencies) {
 	dependencies.push(dependency);
 }
 
-var paths = [path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare')];
 // If paths do not exist, make them.
-for (var pathIndex in paths) {
-	if (!fs.existsSync(paths[pathIndex])) {
-		console.log('Creating directory: ', paths[pathIndex]);
-		fs.mkdirSync(paths[pathIndex]);
+paths.forEach(function (folder) {
+	try {
+		stat = fs.statSync(folder);
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			console.log('Creating directory: ', folder);
+			fs.mkdirSync(folder);
+		}
 	}
-}
+});
 
 // Absolute location for ionic-minify.js and configuration files.
 var minifyFilePath = path.join(cwd, 'after_prepare', 'ionic-minify.js');
@@ -36,10 +44,17 @@ console.log("Copying configuration file to project's hooks/ folder...");
 fs.writeFileSync(configFileNewPath, configFile);
 
 // Move dependencies to the parent node_modules folder.
-console.log('Moving dependencies to node_modules folder...');
-dependencies.forEach(function(dependency){
+dependencies.forEach(function (dependency) {
 	// Moves dependencies to node_modules folder.
-	fs.renameSync(path.join(cwd, 'node_modules', dependency), path.join(cwd, '..', dependency));
+	try {
+		stat = fs.statSync(path.join(cwd, '..', dependency));
+		console.log("It appears that you have already installed " + dependency + '...');
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			fs.renameSync(path.join(cwd, 'node_modules', dependency), path.join(cwd, '..', dependency));
+			console.log("Copying " + dependency + ' to your node_modules/ folder...');
+		}
+	}
 });
 
 console.log('Finished installing. Experience the awesomeness ;)');
