@@ -17,6 +17,8 @@ The `--save-dev` flag is important! If you decide to work on another environment
 Once you installed it, the hook will minify your app's JS and CSS files whenever you run `ionic prepare <platform>` or `ionic build <platform>` with the `--release` flag.
 
 ## Configuration
+ionic-minify now supports configuration file! You can find this file inside your hooks/ folder with the name of minify-conf.json
+
 ```javascript
 {
   "foldersToProcess": [ // Folders that are going to be processed.
