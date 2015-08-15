@@ -1,5 +1,4 @@
 # ionic-minify
-
 This Cordova hook minifies your JavaScript and CSS files, skipping ionic default libraries and other already-minifed (.min extension) files.
 
 It DOES NOT compress the assets inside your www folder, it DOES on your respective platform's www folders, so your development files are never touched.
@@ -9,7 +8,7 @@ It is also compatible with Cordova/Phonegap!
 ## Install
 Install this package inside of your app's root folder with this command.
 ```
-npm install ionic-minify --save-dev
+  npm install ionic-minify --save-dev
 ```
 The `--save-dev` flag is important! If you decide to work on another environment, ionic-minify cannot run without the original package and its dependencies! After install, an `after_prepare` folder will be added to your `hooks` folder with the `ionic-minify.js` script in it.
 
@@ -17,7 +16,9 @@ The `--save-dev` flag is important! If you decide to work on another environment
 Once you installed it, the hook will minify your app's JS and CSS files whenever you run `ionic prepare <platform>` or `ionic build <platform>` with the `--release` flag.
 
 ## Configuration
-ionic-minify now supports configuration file! You can find this file inside your hooks/ folder with the name of minify-conf.json
+ionic-minify now supports configuration file!
+
+You can find this file inside your hooks/ folder with the name of minify-conf.json
 
 ```javascript
 {
