@@ -16,7 +16,6 @@ var UglifyJS      = require('uglify-js');
 var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
 var chalk         = require('chalk');
-var htmlMinifier  = require('html-minifier').minify;
 
 // Process variables
 var rootDir           = process.argv[2];
@@ -55,12 +54,6 @@ var compress = function (file) {
   }
 
   switch (extension) {
-    case '.html':
-      console.log(chalk.red('Minifying HTML file: ' + fileName));
-      var source = fs.readFileSync(file, 'utf8');
-      var result = htmlMinifier(source, hookConf.htmlOptions);
-      fs.writeFileSync(file, result, 'utf8');
-      break;
     case '.js':
       console.log(chalk.yellow('Minifying JS file: ') + chalk.yellow.bold(fileName));
       (hookConf.jsOptions.outSourceMap ? hookConf.jsOptions.outSourceMap = file : null);
