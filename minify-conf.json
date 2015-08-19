@@ -12,5 +12,17 @@
     },
     "cssOptions": {
         "keepSpecialComments": 0
+    },
+    "htmlOptions":{
+        "caseSensitive": true,
+        "useShortDoctype": true,
+        "keepClosingSlash": true,
+        "collapseWhiteSpace": true,
+        "removeEmptyAttributes": true,
+        "removeCommentsFromCDATA": true,
+        "collapseBooleanAttributes": true,
+        "removeScriptTypeAttributes": true,
+        "removeCDATASectionsFromCDATA": true,
+        "removeStyleLinkTypeAttributes": true
     }
 }
