@@ -10,11 +10,12 @@ if(!isRelease){
 }
 
 // Modules
-var fs                = require('fs');
-var path              = require('path');
-var UglifyJS          = require('uglify-js');
-var CleanCSS          = require('clean-css');
-var ngAnnotate        = require('ng-annotate');
+var fs          = require('fs');
+var path        = require('path');
+var UglifyJS    = require('uglify-js');
+var CleanCSS    = require('clean-css');
+var ngAnnotate  = require('ng-annotate');
+var chalk       = require('chalk');
 
 // Process variables
 var rootDir           = process.argv[2];
@@ -23,7 +24,7 @@ var platforms         = process.env.CORDOVA_PLATFORMS.split(',');
 var foldersToProcess  = hookConf.foldersToProcess;
 var cssMinifier       = new CleanCSS(hookConf.cssOptions);
 
-console.log('Starting minifying your files...');
+console.log(chalk.white('Starting minifying your files...'));
 
 // Specify the www folder for each platform in the command.
 platforms.forEach(function (platform) {
@@ -36,7 +37,7 @@ platforms.forEach(function (platform) {
       platformPath = path.join(platformPath, platform, 'www');
       break;
     default:
-      console.log('ionic-minify currently suports Android, iOS and browser only.');
+      console.log(chalk.yellow('ionic-minify currently suports Android, iOS and browser only.'));
       return;
   }
 });
@@ -49,33 +50,33 @@ var compress = function (file) {
   var extension = path.extname(file);
   var fileName = path.basename(file);
   if (fileName.indexOf('.min.') > -1) {
-    ext = '.min' + ext;
+    extension = '.min' + extension;
   }
 
   switch (extension) {
     case '.js':
-      console.log('Minifying JS file: ' + fileName);
-      (hookConf.jsOptions.outSourceMap ? hookConf.jsOptions.outSourceMap = file + '.map' : null);
+      console.log(chalk.yellow('Minifying JS file: ') + chalk.yellow.bold(fileName));
+      (hookConf.jsOptions.outSourceMap ? hookConf.jsOptions.outSourceMap = file : null);
       var ngSafeFile = ngAnnotate(String(fs.readFileSync(file)), { add: true });
       var result = UglifyJS.minify(ngSafeFile.src, hookConf.jsOptions);
       fs.writeFileSync(file, result.code, 'utf8');
       if (result.map) {
-        console.log('Creating map file: ' + fileName + '.map');
+        console.log(chalk.yellow.bold('Creating map file: ' + fileName + '.map'));
         fs.writeFileSync(file + '.map', result.map, 'utf8');
       }
       break;
     case '.css':
-      console.log('Minifying CSS file: ' + fileName);
+      console.log(chalk.cyan('Minifying CSS file: ' + fileName));
       var source = fs.readFileSync(file, 'utf8');
       var result = cssMinifier.minify(source);
       fs.writeFileSync(file, result.styles, 'utf8');
       if (result.sourceMap) {
-        console.log('Creating map file: ' + fileName + '.map');
+        console.log(chalk.cyan.bold('Creating map file: ' + fileName + '.map'));
         fs.writeFileSync(file + '.map', result.sourceMap, 'utf8');
       }
       break;
     default:
-      console.log(extension + ' file found, not minifying...');
+      console.log(chalk.magenta(extension + ' file found, not minifying...'));
       break;
   }
 };
@@ -87,7 +88,7 @@ var compress = function (file) {
 var processFiles = function (dir) {
   fs.readdir(dir, function (error, list) {
     if (error) {
-      console.log('An error has occured while reading directories: ' + error);
+      console.log(chalk.red.bold('An error has occured while reading directories: ' + error));
       return;
     }
     list.forEach(function (file) {

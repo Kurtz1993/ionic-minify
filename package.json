@@ -15,8 +15,9 @@
     "phonegap"
   ],
   "dependencies": {
+    "chalk": "^1.1.0",
     "clean-css": "^3.3.9",
-    "ng-annotate": "^0.15.4",
+    "ng-annotate": "^1.0.2",
     "uglify-js": "^2.4.23"
   },
   "author": "Luis Rogelio Hernández López",
