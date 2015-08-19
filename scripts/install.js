@@ -52,7 +52,9 @@ dependencies.forEach(function (dependency) {
 		console.log(chalk.green("It appears that you have already installed ") + chalk.green.bold(dependency) + '...');
 	} catch (err) {
 		if (err.code === 'ENOENT') {
-			fs.renameSync(path.join(cwd, 'node_modules', dependency), path.join(cwd, '..', dependency));
+			if (dependency !== "chalk"){
+				fs.renameSync(path.join(cwd, 'node_modules', dependency), path.join(cwd, '..', dependency));
+			}
 			console.log(chalk.white("Copying ") + chalk.white.bold(dependency) + chalk.white(' to your node_modules/ folder...'));
 		}
 	}
