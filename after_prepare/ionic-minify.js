@@ -3,7 +3,7 @@ var hookConf  = require('../minify-conf.json');
 var cmd       = process.env.CORDOVA_CMDLINE;
 var isRelease = (cmd.indexOf('--release') > -1);
 
-if(isRelease){
+if(!isRelease){
   // If it's not release, exit.
   return;
 }
@@ -62,7 +62,8 @@ var compress = function (file) {
       console.log('Minifying CSS file: ' + fileName);
       var source = fs.readFileSync(file, 'utf8');
       var css = cssMinifier.minify(source);
-      fs.writeFileSync(file, css.styles, 'utf8');
+      css = css.styles ? css.styles : css;
+      fs.writeFileSync(file, css, 'utf8');
       break;
     default:
       console.log(extension + ' file found, not minifying...');
