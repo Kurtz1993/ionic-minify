@@ -14,6 +14,7 @@ var path          = require('path');
 var UglifyJS      = require('uglify-js');
 var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
+var mozjpeg       = require('mozjpeg-stream');
 
 // Process variables
 var rootDir           = process.argv[2];
@@ -21,6 +22,7 @@ var platformPath      = path.join(rootDir, 'platforms');
 var platforms         = process.env.CORDOVA_PLATFORMS.split(',');
 var foldersToProcess  = hookConf.foldersToProcess;
 var cssMinifier       = new CleanCSS(hookConf.cssOptions);
+var ws                = null;
 
 console.log('Starting minifying your files...');
 
@@ -64,6 +66,17 @@ var compress = function (file) {
       var css = cssMinifier.minify(source);
       css = css.styles ? css.styles : css;
       fs.writeFileSync(file, css, 'utf8');
+      break;
+    case '.jpg':
+    case '.jpeg':
+      console.log('Compressing JPG file: ' + fileName);
+      fs.createReadStream(file)
+        .pipe(mozjpeg(hookConf.jpgOptions))
+        .pipe(ws = fs.createWriteStream(file + '.jpg'));
+      ws.on('finish', function(){
+        fs.unlinkSync(file);
+        fs.renameSync(file + '.jpg', file);
+      });
       break;
     default:
       console.log(extension + ' file found, not minifying...');

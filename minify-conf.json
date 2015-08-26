@@ -2,8 +2,12 @@
     "foldersToProcess": [
         "js",
         "css",
-        "lib"
+        "lib",
+        "img"
     ],
+    "jpgOptions":{
+      "quality": 50
+    },
     "jsOptions": {
         "compress": {
             "drop_console": true
