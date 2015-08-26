@@ -30,6 +30,9 @@ You can find this file inside your hooks/ folder with the name of minify-conf.js
     "css",
     "lib"
   ],
+  "jpgOptions":{  // mozjpeg options
+    "quality": 50
+  },
   "jsOptions": { // UglifyJS2 options, see https://github.com/mishoo/UglifyJS2#api-reference for more options.
     "compress": {
       "drop_console": true
