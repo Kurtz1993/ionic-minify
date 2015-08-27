@@ -24,6 +24,7 @@ var platformPath      = path.join(rootDir, 'platforms');
 var platforms         = process.env.CORDOVA_PLATFORMS.split(',');
 var foldersToProcess  = hookConf.foldersToProcess;
 var cssMinifier       = new CleanCSS(hookConf.cssOptions);
+var optimizationLevel = '-o' + (hookConf.pngOptions.optimizationLevel || 2);
 var ws                = null;
 
 console.log('Starting minifying your files...');
@@ -83,7 +84,7 @@ var compress = function (file) {
       break;
     case '.png':
       console.log('Compressing PNG image: ' + fileName);
-      var compressProcess = spawn(optipng, ['-o2']);
+      var compressProcess = spawn(optipng, [optimizationLevel]);
       fs.createReadStream(file)
         .pipe(compressProcess.stdin);
       compressProcess.stdout.pipe(ws = fs.createWriteStream(file + '.png'));
