@@ -16,7 +16,7 @@ var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
 var mozjpeg       = require('mozjpeg-stream');
 var optipng       = require('optipng-stream-bin').path;
-var spawn         = require('child_process').spawn;
+var spawn         = process.platform === 'win32' ? require('win-spawn') : require('child_process').spawn
 
 // Process variables
 var rootDir           = process.argv[2];
