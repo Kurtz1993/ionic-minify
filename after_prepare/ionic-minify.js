@@ -15,6 +15,8 @@ var UglifyJS      = require('uglify-js');
 var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
 var mozjpeg       = require('mozjpeg-stream');
+var optipng       = require('optipng-stream-bin').path;
+var spawn         = require('child_process').spawn;
 
 // Process variables
 var rootDir           = process.argv[2];
@@ -69,13 +71,26 @@ var compress = function (file) {
       break;
     case '.jpg':
     case '.jpeg':
-      console.log('Compressing JPG file: ' + fileName);
+      console.log('Compressing JPG image: ' + fileName);
       fs.createReadStream(file)
         .pipe(mozjpeg(hookConf.jpgOptions))
         .pipe(ws = fs.createWriteStream(file + '.jpg'));
       ws.on('finish', function(){
         fs.unlinkSync(file);
         fs.renameSync(file + '.jpg', file);
+        console.log("Finished compressing JPG image: " + fileName);
+      });
+      break;
+    case '.png':
+      console.log('Compressing PNG image: ' + fileName);
+      var compressProcess = spawn(optipng, ['-o2']);
+      fs.createReadStream(file)
+        .pipe(compressProcess.stdin);
+      compressProcess.stdout.pipe(ws = fs.createWriteStream(file + '.png'));
+      ws.on('finish', function(){
+        fs.unlinkSync(file);
+        fs.renameSync(file + '.png', file);
+        console.log("Finished compressing PNG image: " + fileName);
       });
       break;
     default:
