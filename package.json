@@ -1,6 +1,6 @@
 {
   "name": "ionic-minify",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Cordova hook that minifies your JavaScript and CSS files, and compresses your JPG and PNG images.",
   "homepage": "https://github.com/Kurtz1993/ionic-minify",
   "keywords": [
@@ -19,9 +19,9 @@
     "clean-css": "^3.3.9",
     "mozjpeg-stream": "^1.0.2",
     "ng-annotate": "^1.0.2",
-    "optipng-stream-bin": "0.0.7",
-    "win-spawn": "^2.0.0",
-    "uglify-js": "^2.4.23"
+    "pngout-bin": "^2.0.1",
+    "uglify-js": "^2.4.23",
+    "win-spawn": "^2.0.0"
   },
   "author": "Luis Rogelio Hernández López",
   "license": "MIT",
@@ -35,6 +35,14 @@
   },
   "scripts": {
     "postinstall": "node scripts/install.js",
-    "postuninstall": "node scripts/uninstall.js"
+    "postuninstall": "node scripts/uninstall.js",
+    "test": "karma start"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.9",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18"
   }
 }
