@@ -82,8 +82,6 @@ var compress = function (file) {
         console.log("Finished compressing JPG image: " + fileName);
       });
       break;
-<<<<<<< HEAD
-=======
     case '.png':
       console.log('Compressing PNG image: ' + fileName);
       exec(optipng, [file, file + '.png', '-s0', '-k0', '-f0'], function(err){
@@ -96,7 +94,6 @@ var compress = function (file) {
         }
       });
       break;
->>>>>>> png-test
     default:
       console.log(extension + ' file found, not minifying...');
       break;
