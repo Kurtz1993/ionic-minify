@@ -15,8 +15,6 @@ var UglifyJS      = require('uglify-js');
 var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
 var mozjpeg       = require('mozjpeg-stream');
-var optipng       = require('optipng-stream-bin').path;
-var spawn         = process.platform === 'win32' ? require('win-spawn') : require('child_process').spawn
 
 // Process variables
 var rootDir           = process.argv[2];
@@ -24,7 +22,6 @@ var platformPath      = path.join(rootDir, 'platforms');
 var platforms         = process.env.CORDOVA_PLATFORMS.split(',');
 var foldersToProcess  = hookConf.foldersToProcess;
 var cssMinifier       = new CleanCSS(hookConf.cssOptions);
-var optimizationLevel = '-o' + (hookConf.pngOptions.optimizationLevel || 2);
 var ws                = null;
 
 console.log('Starting minifying your files...');
@@ -80,18 +77,6 @@ var compress = function (file) {
         fs.unlinkSync(file);
         fs.renameSync(file + '.jpg', file);
         console.log("Finished compressing JPG image: " + fileName);
-      });
-      break;
-    case '.png':
-      console.log('Compressing PNG image: ' + fileName);
-      var compressProcess = spawn(optipng, [optimizationLevel]);
-      fs.createReadStream(file)
-        .pipe(compressProcess.stdin);
-      compressProcess.stdout.pipe(ws = fs.createWriteStream(file + '.png'));
-      ws.on('finish', function(){
-        fs.unlinkSync(file);
-        fs.renameSync(file + '.png', file);
-        console.log("Finished compressing PNG image: " + fileName);
       });
       break;
     default:
