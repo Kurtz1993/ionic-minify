@@ -8,9 +8,6 @@
     "jpgOptions":{
       "quality": 50
     },
-    "pngOptions":{
-      "optimizationLevel": 2
-    },
     "jsOptions": {
         "compress": {
             "drop_console": true
