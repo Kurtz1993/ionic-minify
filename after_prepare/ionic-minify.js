@@ -112,15 +112,13 @@ var processFiles = function (dir) {
     }
     list.forEach(function (file) {
       file = path.join(dir, file);
-      if (dir.indexOf('ionic') === -1) {
-        fs.stat(file, function (err, stat) {
-          if (stat.isDirectory()) {
-            processFiles(file);
-          } else {
-            compress(file);
-          }
-        });
-      }
+      fs.stat(file, function (err, stat) {
+        if (stat.isDirectory()) {
+          processFiles(file);
+        } else if(dir.indexOf('ionic') === -1){
+          compress(file);
+        }
+      });
     });
   });
 };
