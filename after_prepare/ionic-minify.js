@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var hookConf  = require('../minify-conf.json');
 var cmd       = process.env.CORDOVA_CMDLINE;
-var isRelease = (cmd.indexOf('--release') > -1);
+var isRelease = hookConf.alwaysRun || (cmd.indexOf('--release') > -1);
 
 if(!isRelease){
   // If it's not release, exit.
