@@ -16,5 +16,6 @@
     },
     "cssOptions": {
         "keepSpecialComments": 0
-    }
+    },
+    "alwaysRun": false
 }
