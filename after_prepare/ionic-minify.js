@@ -16,7 +16,6 @@ var CleanCSS      = require('clean-css');
 var ngAnnotate    = require('ng-annotate');
 var mozjpeg       = require('mozjpeg-stream');
 var optipng       = require('pngout-bin').path;
-var spawn         = process.platform === 'win32' ? require('win-spawn') : require('child_process').spawn
 var exec          = require('child_process').execFile;
 
 // Process variables
@@ -36,11 +35,12 @@ platforms.forEach(function (platform) {
       platformPath = path.join(platformPath, platform, 'assets', 'www');
       break;
     case 'ios':
+    case 'wp8':
     case 'browser':
       platformPath = path.join(platformPath, platform, 'www');
       break;
     default:
-      console.log('ionic-minify currently suports Android, iOS and browser only.');
+      console.log('ionic-minify currently suports Android, iOS, Windows Phone 8 and browser only.');
       return;
   }
 });

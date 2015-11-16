@@ -18,13 +18,11 @@
     "phonegap"
   ],
   "dependencies": {
-    "chalk": "^1.1.0",
     "clean-css": "3.3.9",
     "mozjpeg-stream": "1.0.2",
     "ng-annotate": "1.0.2",
     "pngout-bin": "2.0.1",
-    "uglify-js": "2.4.23",
-    "win-spawn": "2.0.0"
+    "uglify-js": "2.6.1"
   },
   "author": "Luis Rogelio Hernández López",
   "license": "MIT",
