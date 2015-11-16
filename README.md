@@ -43,7 +43,8 @@ You can find this file inside your hooks/ folder with the name of minify-conf.js
   "cssOptions": { // Clean CSS options, see https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically for more options.
     "noAdvanced": true,
     "keepSpecialComments": 0
-  }
+  },
+  "alwaysRun": false // Set to true if you want the hook to always run.
 }
 ```
 
