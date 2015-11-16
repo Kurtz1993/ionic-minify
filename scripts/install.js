@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-var fs 		= require('fs');
-var path 	= require('path');
+var fs      = require('fs');
+var path    = require('path');
 
 //Directories and configurations.
-var cwd 				= process.cwd();
-var scriptPath 			= __dirname;
-var paths 				= [path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare')];
+var cwd                 = process.cwd();
+var scriptPath          = __dirname;
+var paths               = [path.join(cwd, '..', '..', 'hooks'), path.join(cwd, '..', '..', 'hooks', 'after_prepare')];
 var packageDependencies = require('../package.json').dependencies;
-var dependencies 		= [];
-var stat 				= null;
+var dependencies        = [];
+var stat                = null;
 
 // Detect dependencies.
 for (var dependency in packageDependencies) {
