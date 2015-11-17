@@ -40,8 +40,17 @@ var configFileNewPath = path.join(paths[0], 'minify-conf.json');
 
 console.log("Copying minifier file to project's hooks/after_prepare...");
 fs.writeFileSync(minifyFileNewPath, minifyFile);
-console.log("Copying configuration file to project's hooks/ folder...");
-fs.writeFileSync(configFileNewPath, configFile);
+
+// Create configuration file only if it doesn't exist
+try{
+	stat = fs.statSync(configFileNewPath);
+}
+catch(err){
+	if(err.code === "ENOENT"){
+	  console.log("Copying configuration file to project's hooks/ folder...");
+    fs.writeFileSync(configFileNewPath, configFile);
+	}
+}
 
 // Move dependencies to the parent node_modules folder.
 dependencies.forEach(function (dependency) {
