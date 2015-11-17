@@ -1,21 +1,19 @@
 {
     "foldersToProcess": [
-        "js",
-        "css",
-        "lib",
-        "img"
+      "js",
+      "css",
+      "img"
     ],
     "jpgOptions":{
       "quality": 50
     },
     "jsOptions": {
-        "compress": {
-            "drop_console": true
-        },
-        "fromString": true
+      "compress": {
+        "drop_console": true
+      }
     },
     "cssOptions": {
-        "keepSpecialComments": 0
+      "keepSpecialComments": 0
     },
     "alwaysRun": false
 }
