@@ -26,6 +26,7 @@ var foldersToProcess  = hookConf.foldersToProcess;
 var cssMinifier       = new CleanCSS(hookConf.cssOptions);
 var ws                = null;
 
+hookConf.jsOptions.fromString = true;
 console.log('Starting minifying your files...');
 
 // Specify the www folder for each platform in the command.
