@@ -29,7 +29,7 @@ You can find this file inside your hooks/ folder with the name of minify-conf.js
   "foldersToProcess": [ // Folders that are going to be processed.
     "js",
     "css",
-    "lib"
+    "img"
   ],
   "jpgOptions":{  // mozjpeg options
     "quality": 50
@@ -37,8 +37,7 @@ You can find this file inside your hooks/ folder with the name of minify-conf.js
   "jsOptions": { // UglifyJS2 options, see https://github.com/mishoo/UglifyJS2#api-reference for more options.
     "compress": {
       "drop_console": true
-    },
-    "fromString": true
+    }
   },
   "cssOptions": { // Clean CSS options, see https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically for more options.
     "noAdvanced": true,
