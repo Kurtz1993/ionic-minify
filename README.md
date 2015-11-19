@@ -26,24 +26,29 @@ You can find this file inside your hooks/ folder with the name of minify-conf.js
 
 ```javascript
 {
-  "foldersToProcess": [ // Folders that are going to be processed.
+  // Folders that are going to be processed.
+  "foldersToProcess": [
     "js",
     "css",
     "img"
   ],
-  "jpgOptions":{  // mozjpeg options
+  // mozjpeg options
+  "jpgOptions":{
     "quality": 50
   },
-  "jsOptions": { // UglifyJS2 options, see https://github.com/mishoo/UglifyJS2#api-reference for more options.
+  // UglifyJS2 options, see https://github.com/mishoo/UglifyJS2#api-reference for more options.
+  "jsOptions": {
     "compress": {
       "drop_console": true
     }
   },
-  "cssOptions": { // Clean CSS options, see https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically for more options.
+  // Clean CSS options, see https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically for more options.
+  "cssOptions": {
     "noAdvanced": true,
     "keepSpecialComments": 0
   },
-  "alwaysRun": false // Set to true if you want the hook to always run.
+  "alwaysRun": false, // Set to true if you want the hook to always run.
+  "showErrStack": false // Set to true to show the error stack when a file fails to minify/compress.
 }
 ```
 
