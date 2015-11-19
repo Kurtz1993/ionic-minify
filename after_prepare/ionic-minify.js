@@ -2,7 +2,7 @@
 var hookConf  = require('../minify-conf.json');
 var cmd       = process.env.CORDOVA_CMDLINE;
 var isRelease = hookConf.alwaysRun || (cmd.indexOf('--release') > -1);
-
+hookConf.showErrStack = (hookConf.showErrStack || false);
 if(!isRelease){
   // If it's not release, exit.
   return;
@@ -27,6 +27,7 @@ var cssMinifier       = new CleanCSS(hookConf.cssOptions);
 var ws                = null;
 
 hookConf.jsOptions.fromString = true;
+
 console.log('Starting minifying your files...');
 
 // Specify the www folder for each platform in the command.
@@ -59,44 +60,76 @@ var compress = function (file) {
 
   switch (extension) {
     case '.js':
-      console.log('Minifying JS file: ' + fileName);
-      var ngSafeFile = ngAnnotate(String(fs.readFileSync(file)), { add: true });
-      var result = UglifyJS.minify(ngSafeFile.src, hookConf.jsOptions);
-      fs.writeFileSync(file, result.code, 'utf8');
+      try {
+        var src = fs.readFileSync(file, 'utf8');
+        var ngSafeFile = ngAnnotate(src, { add: true });
+        var result = UglifyJS.minify(ngSafeFile.src, hookConf.jsOptions);
+        fs.writeFileSync(file, result.code, 'utf8');
+        console.log('JS file: ' + fileName + " has been minified!");
+      }
+      catch (err) {
+        console.log("Minifying " + fileName + " resulted in an error and won't be minified.");
+        if(hookConf.showErrStack){
+          console.log(err.stack);
+        }
+      }
       break;
     case '.css':
-      console.log('Minifying CSS file: ' + fileName);
-      var source = fs.readFileSync(file, 'utf8');
-      var css = cssMinifier.minify(source);
-      css = css.styles ? css.styles : css;
-      fs.writeFileSync(file, css, 'utf8');
+      try {
+        var source = fs.readFileSync(file, 'utf8');
+        var css = cssMinifier.minify(source);
+        css = css.styles ? css.styles : css;
+        fs.writeFileSync(file, css, 'utf8');
+        console.log('CSS file: ' + fileName + " has been minified!  ");
+      }
+      catch (err) {
+        console.log("Minifying " + fileName + "resulted in an error and won't be minified.");
+        if(hookConf.showErrStack){
+          console.log(err.stack);
+        }
+      }
       break;
     case '.jpg':
     case '.jpeg':
-      console.log('Compressing JPG image: ' + fileName);
-      fs.createReadStream(file)
-        .pipe(mozjpeg(hookConf.jpgOptions))
-        .pipe(ws = fs.createWriteStream(file + '.jpg'));
-      ws.on('finish', function(){
-        fs.unlinkSync(file);
-        fs.renameSync(file + '.jpg', file);
-        console.log("Finished compressing JPG image: " + fileName);
-      });
+      try {
+        console.log('Compressing JPG image: ' + fileName);
+        fs.createReadStream(file)
+          .pipe(mozjpeg(hookConf.jpgOptions))
+          .pipe(ws = fs.createWriteStream(file + '.jpg'));
+        ws.on('finish', function(){
+          fs.unlinkSync(file);
+          fs.renameSync(file + '.jpg', file);
+          console.log("Finished compressing JPG image: " + fileName);
+        });
+      }
+      catch (err) {
+        console.log("Compressing " + fileName + " resulted in an error and won't be compressed.");
+        if(hookConf.showErrStack){
+          console.log(err.stack);
+        }
+      }
       break;
     case '.png':
-      console.log('Compressing PNG image: ' + fileName);
-      exec(optipng, [file, file + '.png', '-s0', '-k0', '-f0'], function(err){
-        if (err){
-          console.log("An error has ocurred: " + err);
-        } else{
-          fs.unlinkSync(file);
-          fs.renameSync(file + '.png', file);
-          console.log("Finished compressing PNG image:  " + fileName);
+      try{
+        console.log('Compressing PNG image: ' + fileName);
+        exec(optipng, [file, file + '.png', '-s0', '-k0', '-f0'], function(err){
+          if (err){
+            console.log("An error has ocurred: " + err);
+          } else{
+            fs.unlinkSync(file);
+            fs.renameSync(file + '.png', file);
+            console.log("Finished compressing PNG image:  " + fileName);
+          }
+        });
+      }
+      catch (err) {
+        console.log("Compressing " + fileName + " resulted in an error and won't be compressed.");
+        if(hookConf.showErrStack){
+          console.log(err.stack);
         }
-      });
+      }
       break;
     default:
-      console.log(extension + ' file found, not minifying...');
       break;
   }
 };
