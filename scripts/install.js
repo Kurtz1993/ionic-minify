@@ -44,6 +44,7 @@ fs.writeFileSync(minifyFileNewPath, minifyFile);
 // Create configuration file only if it doesn't exist
 try{
 	stat = fs.statSync(configFileNewPath);
+  console.log("You already have a minify-conf.json file...");
 }
 catch(err){
 	if(err.code === "ENOENT"){
@@ -65,6 +66,4 @@ dependencies.forEach(function (dependency) {
 		}
 	}
 });
-
-
 console.log('Finished installing. Experience the awesomeness ;)');

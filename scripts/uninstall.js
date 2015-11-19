@@ -5,9 +5,13 @@
 */
 
 // Modules
-var fs    = require('fs')
-var path  = require('path')
-
+var fs        = require('fs')
+var path      = require('path')
+var readline  = require('readline');
+var rl        = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 // Directories
 var cwd             = process.cwd();
 var minifyJsPath    = path.join(cwd, '..', '..', 'hooks', 'after_prepare', 'ionic-minify.js');
@@ -21,9 +25,12 @@ fs.unlink(minifyJsPath, function (error) {
 });
 
 // Delete minify-conf.json
-fs.unlink(configFilePath, function (error) {
-  if (error === undefined) {
-    console.log('Cannot find the configuration file at ' + configFilePath + '. It may already have been removed!');
+
+rl.question('Do you want to keep your configuration file (Y/N)?[Y] ', function (answer){
+  if(answer.toUpperCase() === 'N'){
+    console.log("Deleting configuration file...");
+    fs.unlinkSync(configFilePath);
   }
+  console.log('ionic-minify was uninstalled successfuly!');
+  process.exit(0);
 });
-console.log('Uninstalled successfuly!');
