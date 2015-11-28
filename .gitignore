@@ -1,6 +1,2 @@
 node_modules/
 typings/
-src/
-.vscode/
-tsconfig.json
-tsd.json

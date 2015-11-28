@@ -19,7 +19,8 @@
     "phonegap"
   ],
   "dependencies": {
-    "clean-css": "~3.3.9",
+    "chalk": "^1.1.1",
+    "clean-css": "~3.4.8",
     "mozjpeg-stream": "~1.0.2",
     "ng-annotate": "~0.15.4",
     "pngout-bin": "~2.0.1",
