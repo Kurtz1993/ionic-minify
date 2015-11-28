@@ -17,8 +17,6 @@ for (var dependency in packageDependencies) {
 	dependencies.push(dependency);
 }
 
-delete dependencies["chalk"];
-
 // If paths do not exist, make them.
 paths.forEach(function (folder) {
 	try {
@@ -63,7 +61,7 @@ dependencies.forEach(function (dependency) {
 		stat = fs.statSync(path.join(cwd, "..", dependency));
 		console.log(chalk.yellow("It appears that you have already installed " + dependency + "..."));
 	} catch (err) {
-		if (err.code === "ENOENT") {
+		if ((dependency !== "chalk") && err.code === "ENOENT") {
 			console.log(chalk.magenta("Copying " + dependency + " to your node_modules/ folder..."));
 			fs.renameSync(path.join(cwd, "node_modules", dependency), path.join(cwd, "..", dependency));
 		}
