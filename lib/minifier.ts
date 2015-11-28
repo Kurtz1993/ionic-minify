@@ -5,15 +5,15 @@
 import fs       = require("fs");
 import path     = require("path");
 import childPr  = require("child_process");
-var ngAnnotate  = require("ng-annotate");
-var UglifyJS    = require("uglify-js");
-var CleanCss    = require("clean-css");
-var mozjpeg     = require("mozjpeg-stream");
-var optipng     = require("pngout-bin").path;
-var exec        = childPr.execFile;
+let ngAnnotate: any  = require("ng-annotate");
+let UglifyJS: any    = require("uglify-js");
+let CleanCss: any    = require("clean-css");
+let mozjpeg: any     = require("mozjpeg-stream");
+let optipng: string  = require("pngout-bin").path;
+let exec: any        = childPr.execFile;
 
 export class Minifier {
-  private config: any;
+  private config: IHookConfig;
   private platforms: string[];
   private basePath: string;
   private platformPaths: string[];
@@ -23,20 +23,23 @@ export class Minifier {
    * @param {HookConf} hookConf Ionic Minify configuration object.
    * @param {String} 
    */
-  public constructor(hookConf: any, platforms: string[], basePath: string) {
+  public constructor(hookConf: IHookConfig, platforms: string[], basePath: string) {
     this.config = hookConf;
     this.platforms = platforms;
     this.basePath = basePath;
     this.cssMinifer = new CleanCss(this.config.cssOptions);
     this.platformPaths = [];
     this.setPlatformPaths();
-    this.processFolders();
   }
   /**
    * Runs the compressor to minify files.
    */
-  public run() {
-
+  private run() {
+    this.platformPaths.forEach((platform) => {
+      this.config.foldersToProcess.forEach((folder) => {
+        this.processFiles(path.join(platform, folder));
+      });
+    });
   }
   
   /**
@@ -60,17 +63,6 @@ export class Minifier {
     });
   }
   
-  /**
-   * Process all directories specified in the configuration.
-   */
-  private processFolders() {
-    this.platformPaths.forEach((platform) => {
-      this.config.foldersToProcess.forEach((folder) => {
-        this.processFiles(path.join(platform, folder));
-      });
-    });
-  }
-
   /**
    * Process all the files in a directory.
    * @param {String} The directory that conttains the files to be processed.
@@ -99,8 +91,9 @@ export class Minifier {
    * @param {String} file The file path.
    */
   private compress (file: string){
-    var extension: string = path.extname(file);
-    var fileName: string = path.basename(file);
+    let extension: string = path.extname(file);
+    let fileName: string = path.basename(file);
+    let src: any;
     
     if (fileName.indexOf(".min.") > -1){
       extension = `.min${extension}`;
@@ -109,9 +102,9 @@ export class Minifier {
     switch (extension){
       case ".js":
         try {
-          var src: string = fs.readFileSync(file, "utf8");
-          var ngSafeFile: any = ngAnnotate(src, {add: true});
-          var result: any = UglifyJS.minify(ngSafeFile.src, this.config.jsOptions);
+          src = fs.readFileSync(file, "utf8");
+          let ngSafeFile: any = ngAnnotate(src, {add: true});
+          let result: any = UglifyJS.minify(ngSafeFile.src, this.config.jsOptions);
           fs.writeFileSync(file, result.code, "utf8");
           console.log(`JS file: ${fileName} has been minified!`);
         } catch (err) {
@@ -123,8 +116,8 @@ export class Minifier {
         break;
       case ".css":
         try {
-          var src: string = fs.readFileSync(file, "utf8");
-          var css: any    = this.cssMinifer.minify(src);
+          src= fs.readFileSync(file, "utf8");
+          let css: any    = this.cssMinifer.minify(src);
           css = (css.styles) ? css.styles : css;
           fs.writeFileSync(file, css, "utf8");
           console.log(`Css file: ${fileName} has been minified!`);
@@ -137,7 +130,7 @@ export class Minifier {
         break;
       case ".jpg":
       case ".jpeg":
-        var ws: fs.WriteStream;
+        let ws: fs.WriteStream;
         try {
           console.log(`Compressing image: ${fileName}`);
           fs.createReadStream(file)
@@ -155,7 +148,7 @@ export class Minifier {
       case ".png":
         try {
           console.log(`Compressing image: ${fileName}`);
-          exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
+          exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], null, (err) => {
             if (err) {
               console.log(`An error has ocurred: ${err}`);
             } else {

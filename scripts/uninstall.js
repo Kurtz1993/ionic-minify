@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-/*
- * Deletes ionic-minify.js hook and it's configuration file
- *
-*/
 
 // Modules
 var fs        = require('fs')
