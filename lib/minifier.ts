@@ -34,7 +34,7 @@ export class Minifier {
   /**
    * Runs the compressor to minify files.
    */
-  private run() {
+  public run() {
     this.platformPaths.forEach((platform) => {
       this.config.foldersToProcess.forEach((folder) => {
         this.processFiles(path.join(platform, folder));

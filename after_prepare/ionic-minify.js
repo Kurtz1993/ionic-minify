@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var im            = require('ionic-minify');
-var path          = require('path');
+var path          = require("path");
+var im            = require("ionic-minify");
 var config        = require("../minify-conf.json");
 var cmd           = process.env.CORDOVA_CMDLINE;
 var rootDir       = process.argv[2];
