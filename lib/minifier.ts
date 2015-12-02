@@ -65,7 +65,7 @@ export class Minifier {
   
   /**
    * Process all the files in a directory.
-   * @param {String} The directory that conttains the files to be processed.
+   * @param {string} dir The directory that conttains the files to be processed.
    */
   private processFiles(dir: string) {
     fs.readdir(dir, (error, list) => {
@@ -88,7 +88,7 @@ export class Minifier {
   }
   /**
    * Compress the specified file.
-   * @param {String} file The file path.
+   * @param {string} file The file path.
    */
   private compress (file: string){
     let extension: string = path.extname(file);
@@ -148,7 +148,7 @@ export class Minifier {
       case ".png":
         try {
           console.log(`Compressing image: ${fileName}`);
-          exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], null, (err) => {
+          exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
             if (err) {
               console.log(`An error has ocurred: ${err}`);
             } else {
