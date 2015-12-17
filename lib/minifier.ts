@@ -1,7 +1,3 @@
-/**
- * @class Minifer
- * The ionic minify compressor class.
- */
 import * as fs from 'fs';
 import * as path from 'path';
 import {execFile as exec} from 'child_process';
@@ -12,7 +8,7 @@ let mozjpeg: any     = require("mozjpeg-stream");
 let optipng: string  = require("pngout-bin").path;
 
 export class Minifier {
-  private config: IHookConfig;
+  private config: IMConfig;
   private platforms: string[];
   private basePath: string;
   private platformPaths: string[];
@@ -20,10 +16,10 @@ export class Minifier {
   
   /**
    * Creates a new ionicMinify compressor.
-   * @param {HookConf} hookConf Ionic Minify configuration object.
+   * @param {HookConf} hookConf - Ionic Minify configuration object.
    * @param {String} 
    */
-  public constructor(hookConf: IHookConfig, platforms: string[], basePath: string) {
+  public constructor(hookConf: IMConfig, platforms: string[], basePath: string) {
     this.config = hookConf;
     this.platforms = platforms;
     this.basePath = basePath;
@@ -35,7 +31,7 @@ export class Minifier {
   /**
    * Runs the compressor to minify files.
    */
-  public run() {
+  public run(): void {
     this.platformPaths.forEach((platform) => {
       this.config.foldersToProcess.forEach((folder) => {
         this.processFiles(path.join(platform, folder));
@@ -46,7 +42,7 @@ export class Minifier {
   /**
    * Set the paths for all the platforms that are going to be minified.
    */
-  private setPlatformPaths() {
+  private setPlatformPaths(): void {
     this.platforms.forEach((platform) => {
       switch (platform) {
         case "android":
@@ -66,9 +62,9 @@ export class Minifier {
   
   /**
    * Process all the files in a directory.
-   * @param {string} dir The directory that conttains the files to be processed.
+   * @param {string} dir - The directory that conttains the files to be processed.
    */
-  private processFiles(dir: string) {
+  private processFiles(dir: string): void {
     fs.readdir(dir, (error, list) => {
       if (error) {
         console.log(`An error ocurred while reading directories: \n ${error}`);
@@ -90,9 +86,9 @@ export class Minifier {
   
   /**
    * Compress the specified file.
-   * @param {string} file The file path.
+   * @param {string} file - The file path.
    */
-  private compress (file: string){
+  private compress (file: string): void {
     let extension: string = path.extname(file);
     let fileName: string = path.basename(file);
     let src: any;
@@ -146,7 +142,7 @@ export class Minifier {
    * @param {String} fileName - The name of the file.
    * @param {String} ext - The extension of the image.
    */
-  private compressImage(file: string, fileName: string, ext: string) {
+  private compressImage(file: string, fileName: string, ext: string): void {
     try {
       console.log(`Compressing image: ${fileName}`);
       if(ext === '.jpg' || ext === '.jpeg') {

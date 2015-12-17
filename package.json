@@ -1,6 +1,6 @@
 {
   "name": "ionic-minify",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cordova hook that minifies your JavaScript and CSS files, and compresses your JPG and PNG images.",
   "homepage": "https://github.com/Kurtz1993/ionic-minify",
   "engines": {
