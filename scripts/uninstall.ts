@@ -1,11 +1,12 @@
 #! /usr/bin/env node
 
 // Modules
-import fs       = require("fs");
-import path     = require("path");
-import readline = require("readline");
-import chalk    = require("chalk");
-let rl          = readline.createInterface({
+import * as fs from 'fs';
+import * as path from 'path';
+import * as readline from 'readline';
+import * as chalk from 'chalk';
+
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });

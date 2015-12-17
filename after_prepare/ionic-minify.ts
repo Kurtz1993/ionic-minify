@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import path       = require("path");
-import im         = require("ionic-minify");
+import * as path from 'path';
+import {Minifier} from 'ionic-minify';
 
 let config: IHookConfig = require("../minify-conf.json");
 let cmd: string         = process.env.CORDOVA_CMDLINE;
@@ -13,7 +13,7 @@ let platformPath: string= path.join(rootDir, "platforms");
 config.showErrStack = (config.showErrStack || false);
 config.jsOptions.fromString = true;
 
-let ionicMinify: im.Minifier = new im.Minifier(config, platforms, platformPath);
+let ionicMinify: Minifier = new Minifier(config, platforms, platformPath);
 
 if (minify) {
   console.log("Starting minifying your files...");

@@ -2,15 +2,14 @@
  * @class Minifer
  * The ionic minify compressor class.
  */
-import fs       = require("fs");
-import path     = require("path");
-import childPr  = require("child_process");
+import * as fs from 'fs';
+import * as path from 'path';
+import {execFile as exec} from 'child_process';
 let ngAnnotate: any  = require("ng-annotate");
 let UglifyJS: any    = require("uglify-js");
 let CleanCss: any    = require("clean-css");
 let mozjpeg: any     = require("mozjpeg-stream");
 let optipng: string  = require("pngout-bin").path;
-let exec: any        = childPr.execFile;
 
 export class Minifier {
   private config: IHookConfig;
@@ -18,6 +17,7 @@ export class Minifier {
   private basePath: string;
   private platformPaths: string[];
   private cssMinifer: any;
+  
   /**
    * Creates a new ionicMinify compressor.
    * @param {HookConf} hookConf Ionic Minify configuration object.
@@ -31,6 +31,7 @@ export class Minifier {
     this.platformPaths = [];
     this.setPlatformPaths();
   }
+  
   /**
    * Runs the compressor to minify files.
    */
@@ -86,6 +87,7 @@ export class Minifier {
       }
     });
   }
+  
   /**
    * Compress the specified file.
    * @param {string} file The file path.
@@ -130,10 +132,26 @@ export class Minifier {
         break;
       case ".jpg":
       case ".jpeg":
+      case ".png":
+        this.compressImage(file, fileName, extension);
+        break;
+      default:
+        break;
+    }
+  }
+  
+  /**
+   * Compress an image (PNG or JPG).
+   * @param {String} file - The path of the file to compress.
+   * @param {String} fileName - The name of the file.
+   * @param {String} ext - The extension of the image.
+   */
+  private compressImage(file: string, fileName: string, ext: string) {
+    try {
+      console.log(`Compressing image: ${fileName}`);
+      if(ext === '.jpg' || ext === '.jpeg') {
         let ws: fs.WriteStream;
-        try {
-          console.log(`Compressing image: ${fileName}`);
-          fs.createReadStream(file)
+        fs.createReadStream(file)
             .pipe(mozjpeg(this.config.jpgOptions))
             .pipe(ws = fs.createWriteStream(`${file}.jpg`));
           ws.on("finish", () => {
@@ -141,28 +159,20 @@ export class Minifier {
             fs.renameSync(`${file}.jpg`, file);
             console.log(`Finished compressing image: ${fileName}`);
           });
-        } catch (err){
-          console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
-        }
-        break;
-      case ".png":
-        try {
-          console.log(`Compressing image: ${fileName}`);
-          exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
-            if (err) {
-              console.log(`An error has ocurred: ${err}`);
-            } else {
-              fs.unlinkSync(file);
-              fs.renameSync(`${file}.png`, file);
-              console.log(`Finished compressing image: ${fileName}`);
-            }
-          });
-        } catch (err){
-          console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
-        }
-        break;
-      default:
-        break;
+      }
+      else if(ext === '.png') {
+        exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
+          if (err) {
+            console.log(`An error has ocurred: ${err}`);
+          } else {
+            fs.unlinkSync(file);
+            fs.renameSync(`${file}.png`, file);
+            console.log(`Finished compressing image: ${fileName}`);
+          }
+        });
+      }
+    } catch (err){
+      console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
     }
   }
 }

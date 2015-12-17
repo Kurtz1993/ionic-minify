@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-import fs     = require("fs");
+/*import fs     = require("fs");
 import path   = require("path");
-import chalk  = require("chalk");
+import chalk  = require("chalk");*/
+
+import * as fs from 'fs';
+import * as path from 'path';
+import * as chalk from 'chalk';
 
 let packageDependencies: string[] = require("../package.json").dependencies;
 let cwd: string             = process.cwd();
