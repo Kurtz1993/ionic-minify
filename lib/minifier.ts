@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {execFile as exec} from 'child_process';
+import {execFile} from 'child_process';
 let ngAnnotate: any  = require("ng-annotate");
 let UglifyJS: any    = require("uglify-js");
 let CleanCss: any    = require("clean-css");
@@ -157,9 +157,12 @@ export class Minifier {
           });
       }
       else if(ext === '.png') {
-        exec(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
+        execFile(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
           if (err) {
-            console.log(`An error has ocurred: ${err}`);
+            console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
+            if(this.config.showErrStack) {
+              console.log(`An error has ocurred: ${err}`);
+            }
           } else {
             fs.unlinkSync(file);
             fs.renameSync(`${file}.png`, file);
@@ -169,6 +172,9 @@ export class Minifier {
       }
     } catch (err){
       console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
+      if(this.config.showErrStack) {
+        console.log(err.stack);
+      }
     }
   }
 }
