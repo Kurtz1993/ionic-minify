@@ -24,7 +24,7 @@ fs.unlink(minifyJsPath, (error) => {
 
 // Delete minify-conf.json
 
-rl.question("Do you want to keep your configuration file (Y/N)?[Y] ", (answer) => {
+rl.question("Do you want to keep your configuration file (Y/N)?[Y] ", (answer: string) => {
   if(answer.toUpperCase() === "N"){
     fs.unlinkSync(configFilePath);
     console.log(chalk.red("Configuration file was deleted..."));
