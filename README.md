@@ -3,6 +3,9 @@
 
 #### Ionic-minify is a derived work of [Ross Martin's original cordova-uglify](https://github.com/rossmartin/cordova-uglify).
 
+## Changelog
+[Here](https://github.com/Kurtz1993/ionic-minify/releases) you can find the changelog.
+
 ionic-minify is a Cordova hook that minifes Javascript and CSS files, and it compress JPG and PNG images from your Cordova/Phonegap, Ionic or other Hybrid Cordova-based project. 
 
 ## Install
@@ -39,7 +42,6 @@ You can find this file inside your hooks/ folder with the name minify-conf.json
   },
   // Clean CSS options, see https://github.com/jakubpawlowicz/clean-css/tree/3.4#how-to-use-clean-css-api for more options.
   "cssOptions": {
-    "noAdvanced": true,
     "keepSpecialComments": 0
   },
   "alwaysRun": false, // Set to true if you want the hook to always run.
