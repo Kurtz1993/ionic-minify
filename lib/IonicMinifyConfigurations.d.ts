@@ -91,6 +91,10 @@ declare interface UJSCompressorOptions {
 
 declare interface UJSConfig {
   /**
+   * As default behaviour of Ionic Minify, this property will always be true.
+   */
+  fromString: boolean,
+  /**
    * Display compressor warnings.
    * @default false
    */

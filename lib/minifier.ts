@@ -97,85 +97,95 @@ export class Minifier {
     if (fileName.indexOf(".min.") > -1){
       extension = `.min${extension}`;
     }
-    
-    switch (extension){
-      case ".js":
-        try {
-          src = fs.readFileSync(file, "utf8");
-          let ngSafeFile: any = ngAnnotate(src, {add: true});
-          let result: any = UglifyJS.minify(ngSafeFile.src, this.config.jsOptions);
-          fs.writeFileSync(file, result.code, "utf8");
-          console.log(`JS file: ${fileName} has been minified!`);
-        } catch (err) {
-          console.log(`Minifying ${fileName} resulted in an error and won't be minified.`);
-          if (this.config.showErrStack) {
-            console.log(err.stack);
-          }
-        }
-        break;
-      case ".css":
-        try {
-          src= fs.readFileSync(file, "utf8");
-          let css: any    = this.cssMinifer.minify(src);
-          css = (css.styles) ? css.styles : css;
-          fs.writeFileSync(file, css, "utf8");
-          console.log(`Css file: ${fileName} has been minified!`);
-        } catch (err) {
-          console.log(`Minifying ${fileName} resulted in an error and won't be minified.`);
-          if (this.config.showErrStack) {
-            console.log(err.stack);
-          }
-        }
-        break;
-      case ".jpg":
-      case ".jpeg":
-      case ".png":
-        this.compressImage(file, fileName, extension);
-        break;
-      default:
-        break;
-    }
-  }
-  
-  /**
-   * Compress an image (PNG or JPG).
-   * @param {String} file - The path of the file to compress.
-   * @param {String} fileName - The name of the file.
-   * @param {String} ext - The extension of the image.
-   */
-  private compressImage(file: string, fileName: string, ext: string): void {
     try {
-      console.log(`Compressing image: ${fileName}`);
-      if(ext === '.jpg' || ext === '.jpeg') {
-        let ws: fs.WriteStream;
-        fs.createReadStream(file)
-            .pipe(mozjpeg(this.config.jpgOptions))
-            .pipe(ws = fs.createWriteStream(`${file}.jpg`));
-          ws.on("finish", () => {
-            fs.unlinkSync(file);
-            fs.renameSync(`${file}.jpg`, file);
-            console.log(`Finished compressing image: ${fileName}`);
-          });
+      switch (extension){
+        case ".js":
+          this.compressJS(file, fileName);
+            
+          break;
+        case ".css":
+          this.compressCSS(file, fileName);
+          break;
+        case ".jpg":
+        case ".jpeg":
+          this.compressJPG(file, fileName);
+          break;
+        case ".png":
+          this.compressPNG(file, fileName);
+          break;
+        default:
+          break;
       }
-      else if(ext === '.png') {
-        execFile(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
-          if (err) {
-            console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
-            if(this.config.showErrStack) {
-              console.log(`An error has ocurred: ${err}`);
-            }
-          } else {
-            fs.unlinkSync(file);
-            fs.renameSync(`${file}.png`, file);
-            console.log(`Finished compressing image: ${fileName}`);
-          }
-        });
+    }
+    catch(err) {
+      if(extension === ".js" || extension === ".css") {
+        console.log(`Minifying ${fileName} resulted in an error and won't be minified.`);
+      } else {
+        console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
       }
-    } catch (err){
-      console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
-      if(this.config.showErrStack) {
+      if (this.config.showErrStack) {
         console.log(err.stack);
       }
     }
+  }
+  /**
+   * Compress a JavaScript file.
+   * @param {String} file - The path of the file to compress.
+   * @param {String} fileName - The name of the file.
+   */
+  private compressJS(file: string, fileName: string): void {
+    let src: string = fs.readFileSync(file, "utf8");
+    let ngSafeFile: any = ngAnnotate(src, {add: true});
+    let result: any = UglifyJS.minify(ngSafeFile.src, this.config.jsOptions);
+    fs.writeFileSync(file, result.code, "utf8");
+    console.log(`JS file: ${fileName} has been minified!`);
+  }
+  /**
+   * Compress a CSS file.
+   * @param {String} file - The path of the file to compress.
+   * @param {String} fileName - The name of the file.
+   */
+  private compressCSS(file: string, fileName: string): void {
+    let src: string = fs.readFileSync(file, "utf8");
+    let css: any = this.cssMinifer.minify(src);
+    css = (css.styles) ? css.styles : css;
+    fs.writeFileSync(file, css, "utf8");
+    console.log(`Css file: ${fileName} has been minified!`);
+  }
+  /**
+   * Compress a JPG image.
+   * @param {String} file - The path of the file to compress.
+   * @param {String} fileName - The name of the file.
+   */
+  private compressJPG(file: string, fileName: string): void {
+    console.log(`Compressing image: ${fileName}`);
+    let ws: fs.WriteStream;
+    fs.createReadStream(file)
+        .pipe(mozjpeg(this.config.jpgOptions))
+        .pipe(ws = fs.createWriteStream(`${file}.jpg`));
+      ws.on("finish", () => {
+        fs.unlinkSync(file);
+        fs.renameSync(`${file}.jpg`, file);
+        console.log(`Finished compressing image: ${fileName}`);
+      });
+  }
+  /**
+   * Compress a PNG image.
+   * @param {String} file - The path of the file to compress.
+   * @param {String} fileName - The name of the file.
+   */
+  private compressPNG(file: string, fileName: string): void {
+    execFile(optipng, [file, `${file}.png`, "-s0", "-k0", "-f0"], (err) => {
+      if (err) {
+        console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
+        if(this.config.showErrStack) {
+          console.log(`An error has ocurred: ${err}`);
+        }
+      } else {
+        fs.unlinkSync(file);
+        fs.renameSync(`${file}.png`, file);
+        console.log(`Finished compressing image: ${fileName}`);
+      }
+    });
   }
 }
