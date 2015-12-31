@@ -118,11 +118,7 @@ export class Minifier {
       }
     }
     catch(err) {
-      if(extension === ".js" || extension === ".css") {
-        console.log(`Minifying ${fileName} resulted in an error and won't be minified.`);
-      } else {
-        console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
-      }
+      console.log(`Compressing/Minifying ${fileName} resulted in an error and won't be compressed/minified.`);
       if (this.config.showErrStack) {
         console.log(err.stack);
       }
@@ -150,7 +146,7 @@ export class Minifier {
     let css: any = this.cssMinifer.minify(src);
     css = (css.styles) ? css.styles : css;
     fs.writeFileSync(file, css, "utf8");
-    console.log(`Css file: ${fileName} has been minified!`);
+    console.log(`CSS file: ${fileName} has been minified!`);
   }
   /**
    * Compress a JPG image.
@@ -166,7 +162,7 @@ export class Minifier {
       ws.on("finish", () => {
         fs.unlinkSync(file);
         fs.renameSync(`${file}.jpg`, file);
-        console.log(`Finished compressing image: ${fileName}`);
+        console.log(`Compressed JPG image: ${fileName}`);
       });
   }
   /**
@@ -184,7 +180,7 @@ export class Minifier {
       } else {
         fs.unlinkSync(file);
         fs.renameSync(`${file}.png`, file);
-        console.log(`Finished compressing image: ${fileName}`);
+        console.log(`Compressed PNG image: ${fileName}`);
       }
     });
   }
