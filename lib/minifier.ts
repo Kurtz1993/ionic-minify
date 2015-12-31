@@ -13,7 +13,6 @@ export class Minifier {
   private basePath: string;
   private platformPaths: string[];
   private cssMinifer: any;
-  
   /**
    * Creates a new ionicMinify compressor.
    * @param {HookConf} hookConf - Ionic Minify configuration object.
@@ -28,7 +27,6 @@ export class Minifier {
     this.platformPaths = [];
     this.setPlatformPaths();
   }
-  
   /**
    * Runs the compressor to minify files.
    */
@@ -39,7 +37,6 @@ export class Minifier {
       });
     });
   }
-  
   /**
    * Set the paths for all the platforms that are going to be minified.
    */
@@ -60,7 +57,6 @@ export class Minifier {
       }
     });
   }
-  
   /**
    * Process all the files in a directory.
    * @param {string} dir - The directory that conttains the files to be processed.
@@ -84,7 +80,6 @@ export class Minifier {
       }
     });
   }
-  
   /**
    * Compress the specified file.
    * @param {string} file - The file path.
@@ -96,11 +91,11 @@ export class Minifier {
     if (fileName.indexOf(".min.") > -1){
       extension = `.min${extension}`;
     }
+    
     try {
       switch (extension){
         case ".js":
           this.compressJS(file, fileName);
-            
           break;
         case ".css":
           this.compressCSS(file, fileName);
