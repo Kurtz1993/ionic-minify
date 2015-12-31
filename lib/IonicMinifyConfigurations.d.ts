@@ -101,3 +101,62 @@ declare interface UJSConfig {
    */
   compress?: UJSCompressorOptions
 }
+
+declare interface CleanCSSConfig {
+  /**
+   * Enable advanced optimizations.
+   * @default true
+   */
+  advanced?: boolean,
+  /**
+   * Enable aggressive merging of properties.
+   * @default true
+   */
+  aggressiveMerging?: boolean,
+  /**
+   * Keep line breaks.
+   * @default false|
+   */
+  keepBreaks?: boolean,
+  /**
+   * Use '*' to keep all, 1 to keep first one only and 0 to remove all.
+   * @default '*'
+   */
+  keepSpecialComments?: any,
+  /**
+   * Merge @media-at rules.
+   * @default true
+   */
+  mediaMerging?: boolean,
+  /**
+   * Process @import rules.
+   */
+  processImport?: boolean,
+  /**
+   * Rebase URL.
+   * @default true
+   */
+  rebase?: boolean,
+  /**
+   * Path to resolve relative @import rules and URLs.
+   */
+  relativeTo?: string,
+  /**
+   * Enable restructuring in advanced optimizations.
+   */
+  restructuring?: boolean,
+  /**
+   * Path to resolve absolute @import rules and URLs.
+   */
+  root?: string,
+  /**
+   * Rounding precission. You can disable it by passing -1.
+   * @default 2
+   */
+  roundingPrecision?: number,
+  /**
+   * Enable shorthand compacting.
+   * @default true
+   */
+  shorthandCompacting?: boolean
+}
