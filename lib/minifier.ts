@@ -92,7 +92,6 @@ export class Minifier {
   private compress (file: string): void {
     let extension: string = path.extname(file);
     let fileName: string = path.basename(file);
-    let src: any;
     
     if (fileName.indexOf(".min.") > -1){
       extension = `.min${extension}`;
