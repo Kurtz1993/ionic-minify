@@ -3,7 +3,8 @@ declare module "ionic-minify"{
     /**
      * Creates a new ionicMinify compressor.
      * @param {HookConf} hookConf - Ionic Minify configuration object.
-     * @param {String} 
+     * @param {String[]} platforms - An array of the platforms to compress.
+     * @param {String} basePath - The platforms base path.
      */
     constructor(hookConf: IMConfig, platforms: string[], basePath: string);
     /**

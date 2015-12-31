@@ -17,7 +17,8 @@ export class Minifier {
   /**
    * Creates a new ionicMinify compressor.
    * @param {HookConf} hookConf - Ionic Minify configuration object.
-   * @param {String} 
+   * @param {String[]} platforms - An array of the platforms to compress.
+   * @param {String} basePath - The platforms base path.
    */
   public constructor(hookConf: IMConfig, platforms: string[], basePath: string) {
     this.config = hookConf;
