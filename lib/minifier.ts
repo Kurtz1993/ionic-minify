@@ -93,6 +93,7 @@ export class Minifier {
     }
     
     try {
+      console.log(`Compressing/minifying ${extension} file: ${fileName}`);
       switch (extension){
         case ".js":
           this.compressJS(file, fileName);
@@ -148,7 +149,6 @@ export class Minifier {
    * @param {String} fileName - The name of the file.
    */
   private compressJPG(file: string, fileName: string): void {
-    console.log(`Compressing image: ${fileName}`);
     let ws: fs.WriteStream;
     fs.createReadStream(file)
         .pipe(mozjpeg(this.config.jpgOptions))
