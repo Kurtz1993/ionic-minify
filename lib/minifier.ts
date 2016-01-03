@@ -93,7 +93,8 @@ export class Minifier {
     }
     
     try {
-      console.log(`Compressing/minifying ${extension} file: ${fileName}`);
+      let ext = extension.split('.')[1].toUpperCase();
+      console.log(`Compressing ${ext} file: ${fileName}`);
       switch (extension){
         case ".js":
           this.compressJS(file, fileName);
