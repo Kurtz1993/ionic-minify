@@ -21,7 +21,6 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "clean-css": "3.4.8",
-    "html-minifier": "^1.0.1",
     "mozjpeg-stream": "1.0.2",
     "ng-annotate": "0.15.4",
     "pngout-bin": "2.0.1",
