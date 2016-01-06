@@ -7,6 +7,7 @@ import chalk  = require("chalk");*/
 import * as fs from 'fs';
 import * as path from 'path';
 import * as chalk from 'chalk';
+import * as shell from 'shelljs';
 
 let packageDependencies: string[] = require("../package.json").dependencies;
 let cwd: string             = process.cwd();
@@ -26,7 +27,7 @@ paths.forEach((folder) => {
 		stat = fs.statSync(folder);
 	} catch (err) {
 		if (err.code === "ENOENT") {
-			console.log(chalk.gray.bold("Creating directory: " + folder));
+			console.log(chalk.yellow.bold(`Creating directory: ${folder}`));
 			fs.mkdirSync(folder);
 		}
 	}
@@ -42,7 +43,7 @@ let configFile: string = fs.readFileSync(configFilePath, "utf8");
 let minifyFileNewPath: string = path.join(paths[1], "ionic-minify.js");
 let configFileNewPath: string = path.join(paths[0], "minify-conf.json");
 
-console.log(chalk.green("Copying minifier file to project's hooks/after_prepare..."));
+console.log(chalk.cyan("Copying minifier file to project's hooks/after_prepare..."));
 fs.writeFileSync(minifyFileNewPath, minifyFile);
 
 // Create configuration file only if it doesn't exist
@@ -52,22 +53,25 @@ try{
 }
 catch(err){
 	if(err.code === "ENOENT"){
-	  console.log(chalk.green("Copying configuration file to project's hooks/ folder..."));
+	  console.log(chalk.cyan("Copying configuration file to project's hooks/ folder..."));
     fs.writeFileSync(configFileNewPath, configFile);
 	}
 }
+
+console.log(chalk.cyan("Updating hooks directory to have execution permissions..."));
+shell.chmod("-R", 755, paths[0]);
 
 // Move dependencies to the parent node_modules folder.
 dependencies.forEach((dependency) => {
 	// Moves dependencies to node_modules folder.
 	try {
 		stat = fs.statSync(path.join(cwd, "..", dependency));
-		console.log(chalk.yellow("It appears that you have already installed " + dependency + "..."));
+		console.log(chalk.yellow(`It appears that you have already installed ${dependency}...`));
 	} catch (err) {
-		if ((dependency !== "chalk") && err.code === "ENOENT") {
-			console.log(chalk.magenta("Copying " + dependency + " to your node_modules/ folder..."));
+		if ((dependency !== "chalk" && dependency !== "shelljs") && err.code === "ENOENT") {
+			console.log(chalk.blue(`Copying ${dependency} to your node_modules/ folder...`));
 			fs.renameSync(path.join(cwd, "node_modules", dependency), path.join(cwd, "..", dependency));
 		}
 	}
 });
-console.log(chalk.cyan.bold("Finished installing. Experience the awesomeness ;)"));
+console.log(chalk.green.bold("Ionic minify has been installed successfully! :)"));
