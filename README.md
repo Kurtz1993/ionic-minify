@@ -16,9 +16,6 @@ Just run the following command inside your project's root folder:
 ## Usage
 Just run `ionic prepare <platform>` or `ionic build <platform>` with the `--release` flag or set the `alwaysRun` attribute inside the configuration file to true.
 
-## Quirks:
-* On Linux and OSX: `hooks` folder needs to have permissions modified.  Perform a `chmod -R 755 /hooks` to resolve this issue.
-
 ## Configuration
 You can find this file inside your hooks/ folder with the name minify-conf.json
 
