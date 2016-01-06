@@ -18,7 +18,7 @@ let configFilePath: string  = path.join(cwd, "..", "..", "hooks", "minify-conf.j
 // Delete ionic-minify.js
 fs.unlink(minifyJsPath, (error) => {
   if (error === undefined) {
-    console.log(chalk.red("Cannot find hook to remove at " + minifyJsPath + ". It may already have been removed!"));
+    console.log(chalk.red(`Cannot find hook to remove at ${minifyJsPath}. It may already have been removed!`));
   }
 });
 
