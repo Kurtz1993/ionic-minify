@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
 // Modules
-import * as fs from 'fs';
-import * as path from 'path';
-import * as readline from 'readline';
-import * as chalk from 'chalk';
+import * as fs from "fs";
+import * as path from "path";
+import * as readline from "readline";
+import * as chalk from "chalk";
 
 let rl = readline.createInterface({
   input: process.stdin,
