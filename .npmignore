@@ -1,5 +1,4 @@
 .gitignore
-.vscode/
 typings/
 tsd.json
 tsconfig.json
