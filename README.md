@@ -3,6 +3,10 @@
 
 #### Ionic-minify is a derived work of [Ross Martin's original cordova-uglify](https://github.com/rossmartin/cordova-uglify).
 
+# Important note
+
+The use of the `--release` flag is deprecated, use `--minify` instead.
+
 ## Changelog
 [Here](https://github.com/Kurtz1993/ionic-minify/releases) you can find the changelog.
 
@@ -14,7 +18,7 @@ Just run the following command inside your project's root folder:
   npm install ionic-minify --save-dev
 ```
 ## Usage
-Just run `ionic prepare <platform>` or `ionic build <platform>` with the `--release` flag or set the `alwaysRun` attribute inside the configuration file to true.
+Just run `ionic prepare <platform>` or `ionic build <platform>` with the `--minify` flag or set the `alwaysRun` attribute inside the configuration file to true.
 
 ## Configuration
 You can find this file inside your hooks/ folder with the name minify-conf.json
