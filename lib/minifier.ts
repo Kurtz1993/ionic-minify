@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import {execFile} from 'child_process';
+import * as fs from "fs";
+import * as path from "path";
+import {execFile} from "child_process";
 let ngAnnotate: any  = require("ng-annotate");
 let UglifyJS: any    = require("uglify-js");
 let CleanCss: any    = require("clean-css");

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import * as path from 'path';
-import {Minifier} from 'ionic-minify';
+import * as path from "path";
+import {Minifier} from "ionic-minify";
 
 let config: IMConfig = require("../minify-conf.json");
 let cmd: string         = process.env.CORDOVA_CMDLINE;
