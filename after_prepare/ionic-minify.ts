@@ -3,19 +3,26 @@
 import * as path from "path";
 import {Minifier} from "ionic-minify";
 
+let minify: boolean;
 let config: IMConfig = require("../minify-conf.json");
 let cmd: string         = process.env.CORDOVA_CMDLINE;
 let rootDir: string     = process.argv[2];
-let minify: boolean     = config.alwaysRun || (cmd.indexOf("--minify") > -1);
 let platforms: string[] = process.env.CORDOVA_PLATFORMS.split(',');
 let platformPath: string= path.join(rootDir, "platforms");
+
+if(cmd.indexOf("--release") > -1) {
+  console.log("WARN: The use of the --release flag is deprecated!! Use --minify instead!");
+  minify = true;
+} else {
+  minify = config.alwaysRun || (cmd.indexOf("--minify") > -1);
+}
+
 
 config.showErrStack = (config.showErrStack || false);
 config.jsOptions.fromString = true;
 
-let ionicMinify: Minifier = new Minifier(config, platforms, platformPath);
-
 if (minify) {
+  let ionicMinify: Minifier = new Minifier(config, platforms, platformPath);
   console.log("Starting minifying your files...");
   ionicMinify.run();
 }
