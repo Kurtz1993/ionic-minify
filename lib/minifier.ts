@@ -11,8 +11,9 @@ export class Minifier {
   private config: IMConfig;
   private platforms: string[];
   private basePath: string;
-  private platformPaths: string[];
+  private platformPaths: string[] = [];
   private cssMinifer: any;
+  
   /**
    * Creates a new ionicMinify compressor.
    * @param {HookConf} hookConf - Ionic Minify configuration object.
@@ -24,9 +25,9 @@ export class Minifier {
     this.platforms = platforms;
     this.basePath = basePath;
     this.cssMinifer = new CleanCss(this.config.cssOptions);
-    this.platformPaths = [];
     this.setPlatformPaths();
   }
+  
   /**
    * Runs the compressor to minify files.
    */
@@ -37,6 +38,7 @@ export class Minifier {
       });
     });
   }
+  
   /**
    * Set the paths for all the platforms that are going to be minified.
    */
@@ -57,6 +59,7 @@ export class Minifier {
       }
     });
   }
+  
   /**
    * Process all the files in a directory.
    * @param {string} dir - The directory that conttains the files to be processed.
@@ -80,6 +83,7 @@ export class Minifier {
       }
     });
   }
+  
   /**
    * Compress the specified file.
    * @param {string} file - The file path.
@@ -120,6 +124,7 @@ export class Minifier {
       }
     }
   }
+  
   /**
    * Compress a JavaScript file.
    * @param {String} file - The path of the file to compress.
@@ -132,6 +137,7 @@ export class Minifier {
     fs.writeFileSync(file, result.code, "utf8");
     console.log(`JS file: ${fileName} has been minified!`);
   }
+  
   /**
    * Compress a CSS file.
    * @param {String} file - The path of the file to compress.
@@ -144,6 +150,7 @@ export class Minifier {
     fs.writeFileSync(file, css, "utf8");
     console.log(`CSS file: ${fileName} has been minified!`);
   }
+  
   /**
    * Compress a JPG image.
    * @param {String} file - The path of the file to compress.
@@ -154,12 +161,18 @@ export class Minifier {
     fs.createReadStream(file)
         .pipe(mozjpeg(this.config.jpgOptions))
         .pipe(ws = fs.createWriteStream(`${file}.jpg`));
-      ws.on("finish", () => {
-        fs.unlinkSync(file);
-        fs.renameSync(`${file}.jpg`, file);
-        console.log(`Compressed JPG image: ${fileName}`);
-      });
+        
+    ws.on("error", (err: any) => {
+      console.log(`Compressing ${fileName} resulted in an error and won't be compressed.`);
+    });
+    
+    ws.on("finish", () => {
+      fs.unlinkSync(file);
+      fs.renameSync(`${file}.jpg`, file);
+      console.log(`JPG image: ${fileName} has been compressed!`);
+    });
   }
+  
   /**
    * Compress a PNG image.
    * @param {String} file - The path of the file to compress.
@@ -175,7 +188,7 @@ export class Minifier {
       } else {
         fs.unlinkSync(file);
         fs.renameSync(`${file}.png`, file);
-        console.log(`Compressed PNG image: ${fileName}`);
+        console.log(`PNG image: ${fileName} has been compressed!`);
       }
     });
   }
