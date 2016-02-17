@@ -28,13 +28,14 @@ export class Minifier {
     this.setPlatformPaths();
   }
   
-  /** Checks whether a path starts with or contains a hidden file or a folder.
-  * @param {string} source - The path of the file that needs to be validated.
-  * returns {boolean} - `true` if the source is blacklisted and otherwise `false`.
-  * Note: code is from http://stackoverflow.com/questions/8905680/nodejs-check-for-hidden-files/
-*/
-  private _isHiddenFile(file: string): boolean {
-      return (/(^|\/)\.[^\/\.]/g).test(file);
+  /**
+   * Checks whether a path starts with or contains a hidden file or a folder.
+   * @param {string} source - The path of the file that needs to be validated.
+   * returns {boolean} - `true` if the source is blacklisted and otherwise `false`.
+   * Note: code is from http://stackoverflow.com/questions/8905680/nodejs-check-for-hidden-files/
+   */
+  private isHiddenFile(source: string): boolean {
+      return (/(^|\/)\.[^\/\.]/g).test(source);
   }
   
   /**
@@ -85,8 +86,8 @@ export class Minifier {
             if (stat.isDirectory()){
               this.processFiles(file);  
             } else {
-              if(this._isHiddenFile(file)){
-                  console.log('Not processing hidden file: ' + file);
+              if(this.isHiddenFile(file)){
+                  console.log(`Not processing hidden file: ${file}`);
               } else {
                   this.compress(file);
               }
