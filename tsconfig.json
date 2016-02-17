@@ -4,6 +4,7 @@
     "module": "commonjs",
     "removeComments": true,
     "noImplicitAny": true,
-    "listFiles": true
+    "listFiles": true,
+    "newLine": "LF"
   }
 }
