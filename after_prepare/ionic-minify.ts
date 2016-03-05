@@ -10,13 +10,12 @@ let rootDir: string     = process.argv[2];
 let platforms: string[] = process.env.CORDOVA_PLATFORMS.split(',');
 let platformPath: string= path.join(rootDir, "platforms");
 
-if(cmd.indexOf("--release") > -1) {
-  console.log("WARN: The use of the --release flag is deprecated!! Use --minify instead!");
+if(cmd.indexOf("--release") > -1 || cmd.indexOf("--minify") > -1) {
+  if(cmd.indexOf("--release") > -1) {
+    console.log("WARN: The use of the --release flag is deprecated!! Use --minify instead!");
+  }
   minify = true;
-} else {
-  minify = (cmd.indexOf("--minify") > -1);
 }
-
 
 config.showErrStack = (config.showErrStack || false);
 config.jsOptions.fromString = true;
