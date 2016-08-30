@@ -17,6 +17,12 @@ Just run the following command inside your project's root folder:
 ```
   npm install ionic-minify --save-dev
 ```
+
+## Installation Quirks
+Sometimes on UNIX systems, installation can result in an error due to permisions and ownership of the files and folders.
+
+When installing on UNIX systems please make sure that the ownership of the files and folders of your project is your user and to run the comand using `sudo`. 
+
 ## Usage
 Just run `ionic prepare <platform>` or `ionic build <platform>` with the `--minify` flag or set the `alwaysRun` attribute inside the configuration file to true.
 
